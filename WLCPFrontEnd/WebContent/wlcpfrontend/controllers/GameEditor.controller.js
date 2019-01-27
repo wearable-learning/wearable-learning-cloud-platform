@@ -422,16 +422,27 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	},
 	
 	saveSuccess : function() {
-		if(!this.saveRun) {
-			this.busy.close();
-		} else {
-			this.run();
-		}
+		$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/transpileGame?gameId=" + this.gameModel.GameId + "&write=true", type: 'GET', success : $.proxy(this.transpileSuccess, this), error : $.proxy(this.transpileError, this)});
 	},
 	
 	saveError : function() {
 		this.busy.close();
 		sap.m.MessageBox.error("There was an error saving the game!");
+	},
+	
+	transpileSuccess : function() {
+		if(!this.saveRun) {
+			sap.m.MessageToast.show("Save & Transpile Complete!");
+			this.busy.close();
+		} else {
+			sap.m.MessageToast.show("Saved and Transpiled Successfully! Opening Debugger!");
+			$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/checkDebugInstanceRunning?usernameId=" + sap.ui.getCore().getModel("user").oData.username, type: 'GET', success : $.proxy(this.checkForRunningDebugInstanceSuccess, this), error : $.proxy(this.checkForRunningDebugInstanceError, this)});
+		}
+	},
+	
+	transpileError : function() {
+		sap.m.MessageBox.error("The game was saved, but there was an error transpiling!");
+		this.busy.close();
 	},
 	
 	runGame : function() {
@@ -443,18 +454,6 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		//Open the busy dialog
 		this.busy = new sap.m.BusyDialog();
 		this.busy.open();
-		$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/transpileGame?gameId=" + this.gameModel.GameId + "&write=true", type: 'GET', success : $.proxy(this.runSuccess, this), error : $.proxy(this.runError, this)});
-	},
-	
-	runSuccess : function() {
-		this.busy.close();
-		sap.m.MessageToast.show("Transpiled Successfully! Opening Debugger!");
-		$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/checkDebugInstanceRunning?usernameId=" + sap.ui.getCore().getModel("user").oData.username, type: 'GET', success : $.proxy(this.checkForRunningDebugInstanceSuccess, this), error : $.proxy(this.checkForRunningDebugInstanceError, this)});
-	},
-	
-	runError : function() {
-		sap.m.MessageBox.error("There was an error transpiling the game. Debug not possible!");
-		this.busy.close();
 	},
 	
 	checkForRunningDebugInstanceSuccess : function(data) {
