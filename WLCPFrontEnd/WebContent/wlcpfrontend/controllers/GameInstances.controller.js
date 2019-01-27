@@ -44,9 +44,19 @@ sap.ui.controller("wlcpfrontend.controllers.GameInstances", {
 	startGameInstance : function() {
 		this.busy = new sap.m.BusyDialog();
 		this.busy.open();
+		$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/transpileGame?gameId=" + sap.ui.getCore().byId("gameInstanceGame").getSelectedKey() + "&write=true", type: 'GET', success : $.proxy(this.transpileSuccess, this), error : $.proxy(this.transpileError, this)});
+	},
+	
+	transpileSuccess : function() {
 		var gameId = sap.ui.getCore().byId("gameInstanceGame").getSelectedKey();
 		var gameLobbyId = 1;
 		$.ajax({url : "http://" + ServerConfig.getServerAddress() + "/controllers/startGameInstance/" + gameId + "/" + gameLobbyId + "/" + sap.ui.getCore().getModel("user").oData.username, success : $.proxy(this.gameInstanceStarted, this), error : $.proxy(this.gameInstanceStartError, this)});
+	},
+	
+	transpileError : function() {
+		sap.m.MessageBox.error("There was an error transpiling the game! The instance could not be started!");
+		this.onCancel();
+		this.busy.close();
 	},
 	
 	gameInstanceStarted : function(response) {
