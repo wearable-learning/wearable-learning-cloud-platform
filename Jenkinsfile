@@ -5,7 +5,7 @@ node {
   	  notifyBuild('STARTED')
   
 	  stage('Preparation') {
-	      git 'https://github.com/mmicciolo/wearable-learning-cloud-platform.git'
+	      git 'https://github.com/wearable-learning/wearable-learning-cloud-platform.git'
 	      mvnHome = tool 'M3'
 	  }
 	  stage('Build') {
