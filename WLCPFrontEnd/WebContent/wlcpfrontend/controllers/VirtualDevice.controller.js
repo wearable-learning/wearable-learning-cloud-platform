@@ -215,7 +215,7 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 		this.model.setData(this.modelJSON);
 	},
 	
-	onDebugJoinPress : function(oEvent) {
+	onTeamPlayerSelected : function(oEvent) {
 		var selectedTeamPlayer = this.model.getProperty(oEvent.getSource().getParent().getItems()[1].getSelectedItem().getBindingContext().getPath());
 		this.setupSocketConnection(selectedTeamPlayer.team - 1, selectedTeamPlayer.player - 1);
 	},
