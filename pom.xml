@@ -93,6 +93,7 @@
 		<module>WLCPTranspiler</module>
 		<module>WLCPWebApp</module>
 		<module>WLCPFrontEnd</module>
+		<module>WLCPWebsite</module>
 	</modules>
 
 </project>
