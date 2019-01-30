@@ -10,7 +10,7 @@ import wlcp.shared.message.PlayerAvaliableMessage;
 
 public class WLCPGameClientExample {
 	
-private static Scanner scanner = new Scanner(System.in);
+	private static Scanner scanner = new Scanner(System.in);
 	
 	public static void main(String[] args) throws WLCPGameInstanceOrUsernameDoesNotExistException, IOException, WLCPGameServerCouldNotConnectException {
 		System.out.print("Please enter a username: ");
