@@ -1,6 +1,9 @@
 package wlcp.gameserver.api;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -9,6 +12,7 @@ import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -17,14 +21,22 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import wlcp.gameserver.api.exception.WLCPGameInstanceOrUsernameDoesNotExistException;
+import wlcp.gameserver.api.exception.WLCPGameServerCouldNotConnectException;
 import wlcp.shared.message.DisplayTextMessage;
 import wlcp.shared.message.KeyboardInputMessage;
+import wlcp.shared.message.PlayerAvaliableMessage;
 import wlcp.shared.message.SequenceButtonPressMessage;
 import wlcp.shared.message.SingleButtonPressMessage;
 
-public class WLCPGameClient {
+public class WLCPGameClient implements IWLCPGameClient {
 	
-	private int gameInstanceId;
+	private String baseURL;
+	private int port;
+	private int gamePin;
 	private String username;
 	private int team;
 	private int player;
@@ -34,11 +46,11 @@ public class WLCPGameClient {
 	private ListenableFuture<StompSession> stompSession;
 	private WLCPGameClientSessionHandler sessionHandler;
 
-	public WLCPGameClient(int gameInstanceId, String username, int team, int player) {
-		this.gameInstanceId = gameInstanceId;
+	public WLCPGameClient(String baseURL, int port, int gamePin, String username) {
+		this.baseURL = baseURL;
+		this.port = port;
+		this.gamePin = gamePin;
 		this.username = username;
-		this.team = team;
-		this.player = player;
 		List<Transport> transports = new ArrayList<Transport>(2);
 		transports.add(new WebSocketTransport(new StandardWebSocketClient()));
 		transports.add(new RestTemplateXhrTransport());
@@ -47,14 +59,37 @@ public class WLCPGameClient {
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 	}
 	
-	public void connectToGameServer(String url, WLCPGameClientSessionHandler sessionHandler) {
+	public List<PlayerAvaliableMessage> getPlayersAvailableFromGamePin() throws WLCPGameInstanceOrUsernameDoesNotExistException, IOException {
+		URL url = new URL("http://" + baseURL + ":" + port + "/controllers/playersAvaliable/" + gamePin + "/" + username);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Content-Type", "application/json");
+		if(con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			ObjectMapper mapper = new ObjectMapper();
+			List<PlayerAvaliableMessage> players = mapper.readValue(con.getInputStream(), new TypeReference<List<PlayerAvaliableMessage>>(){});
+			con.disconnect();
+			return players;
+		} else {
+			con.disconnect();
+			throw new WLCPGameInstanceOrUsernameDoesNotExistException("The Game Pin Or Username entered does not exist!");
+		}
+	}
+	
+	public void connect(int team, int player, WLCPGameClientSessionHandler sessionHandler) throws WLCPGameServerCouldNotConnectException {
 		this.sessionHandler = sessionHandler;
-        stompSession = stompClient.connect(url, sessionHandler);
+		this.team = team;
+		this.player = player;
+		stompSession = stompClient.connect("ws://" + baseURL + ":" + port + "/wlcpGameServer/0", new StompSessionHandler(sessionHandler));
+		try {
+			stompSession.get();
+		} catch (Exception e) {
+			throw new WLCPGameServerCouldNotConnectException("Could not connect to game server! " + e.getMessage());
+		}
 	}
 	
 	public void connectToGameInstance() {
 		try {
-			stompSession.get().subscribe("/topic/connectionResult/" + username + "/" + team + "/" + player, new StompFrameHandler() {
+			stompSession.get().subscribe("/subscription/connectionResult/" + gamePin + "/" + username + "/" + team + "/" + player, new StompFrameHandler() {
 
 				public Type getPayloadType(StompHeaders headers) {
 					// TODO Auto-generated method stub
@@ -67,63 +102,61 @@ public class WLCPGameClient {
 				}
 			
 			});
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
+		
+		subscribeToChannels();
+		
 		try {
-			stompSession.get().send("/app/gameInstance/" + gameInstanceId + "/connectToGameInstance/" + this.username + "/" + team + "/" + player, "{}");
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			stompSession.get().send("/app/gameInstance/" + gamePin + "/connectToGameInstance/" + username + "/" + team + "/" + player, "{}");
+		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void disconnectFromGameInstance() {
 		try {
-			stompSession.get().subscribe("/topic/disconnectionResult/" + username + "/" + team + "/" + player, new StompFrameHandler() {
+			stompSession.get().subscribe("/subscription/disconnectionResult/" + gamePin + "/" + username + "/" + team + "/" + player, new StompFrameHandler() {
 
 				public Type getPayloadType(StompHeaders headers) {
-					// TODO Auto-generated method stub
 					return Object.class;
 				}
 
 				public void handleFrame(StompHeaders headers, Object payload) {
-					// TODO Auto-generated method stub
 					try {
+						sessionHandler.disconnectedFromGameInstance();
 						stompSession.get().disconnect();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 				
 			});
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			stompSession.get().send("/app/gameInstance/" + gamePin + "/disconnectFromGameInstance/" + username + "/" + team + "/" + player, "{}");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void disconnectFromGameServer() {
 		sockJsClient.stop();
+		sessionHandler.disconnectedFromServer();
 	}
 	
 	public void subscribeToChannels() {
 		try {
-			stompSession.get().subscribe("/topic/gameInstance/" + gameInstanceId + "/displayText/" + this.username + "/" + team + "/" + player, new StompFrameHandler() {
+			stompSession.get().subscribe("/subscription/gameInstance/" + gamePin + "/displayText/" + username + "/" + team + "/" + player, new StompFrameHandler() {
 
 				public Type getPayloadType(StompHeaders headers) {
 					// TODO Auto-generated method stub
@@ -145,11 +178,11 @@ public class WLCPGameClient {
 			e.printStackTrace();
 		}
 		try {
-			stompSession.get().subscribe("/topic/gameInstance/" + gameInstanceId + "/singleButtonPressRequest/" + this.username + "/" + team + "/" + player, new StompFrameHandler() {
+			stompSession.get().subscribe("/subscription/gameInstance/" + gamePin + "/singleButtonPressRequest/" + username + "/" + team + "/" + player, new StompFrameHandler() {
 
 				public Type getPayloadType(StompHeaders headers) {
 					// TODO Auto-generated method stub
-					return null;
+					return Object.class;
 				}
 
 				public void handleFrame(StompHeaders headers, Object payload) {
@@ -166,11 +199,11 @@ public class WLCPGameClient {
 			e.printStackTrace();
 		}
 		try {
-			stompSession.get().subscribe("/topic/gameInstance/" + gameInstanceId + "/sequenceButtonPressRequest/" + this.username + "/" + team + "/" + player, new StompFrameHandler() {
+			stompSession.get().subscribe("/subscription/gameInstance/" + gamePin + "/sequenceButtonPressRequest/" + username + "/" + team + "/" + player, new StompFrameHandler() {
 
 				public Type getPayloadType(StompHeaders headers) {
 					// TODO Auto-generated method stub
-					return null;
+					return Object.class;
 				}
 
 				public void handleFrame(StompHeaders headers, Object payload) {
@@ -187,11 +220,11 @@ public class WLCPGameClient {
 			e.printStackTrace();
 		}
 		try {
-			stompSession.get().subscribe("/topic/gameInstance/" + gameInstanceId + "/keyboardInputRequest/" + this.username + "/" + team + "/" + player, new StompFrameHandler() {
+			stompSession.get().subscribe("/subscription/gameInstance/" + gamePin + "/keyboardInputRequest/" + username + "/" + team + "/" + player, new StompFrameHandler() {
 
 				public Type getPayloadType(StompHeaders headers) {
 					// TODO Auto-generated method stub
-					return null;
+					return Object.class;
 				}
 
 				public void handleFrame(StompHeaders headers, Object payload) {
@@ -213,7 +246,7 @@ public class WLCPGameClient {
 		SingleButtonPressMessage msg = new SingleButtonPressMessage();
 		msg.buttonPress = buttonPress;
 		try {
-			stompSession.get().send("/app/gameInstance/" + gameInstanceId + "/singleButtonPress/" + username + "/" + team + "/" + player, msg);
+			stompSession.get().send("/app/gameInstance/" + gamePin + "/singleButtonPress/" + username + "/" + team + "/" + player, msg);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -227,7 +260,7 @@ public class WLCPGameClient {
 		SequenceButtonPressMessage msg = new SequenceButtonPressMessage();
 		msg.sequenceButtonPress = sequence;
 		try {
-			stompSession.get().send("/app/gameInstance/" + gameInstanceId + "/sequenceButtonPress/" + username + "/" + team + "/" + player, msg);
+			stompSession.get().send("/app/gameInstance/" + gamePin + "/sequenceButtonPress/" + username + "/" + team + "/" + player, msg);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -241,7 +274,7 @@ public class WLCPGameClient {
 		KeyboardInputMessage msg = new KeyboardInputMessage();
 		msg.keyboardInput = keyboardInput;
 		try {
-			stompSession.get().send("/app/gameInstance/" + gameInstanceId + "/keyboardInput/" + username + "/" + team + "/" + player, msg);
+			stompSession.get().send("/app/gameInstance/" + gamePin + "/keyboardInput/" + username + "/" + team + "/" + player, msg);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -250,29 +283,21 @@ public class WLCPGameClient {
 			e.printStackTrace();
 		}
 	}
-
-	public int getGameInstanceId() {
-		return gameInstanceId;
-	}
-
-	public void setGameInstanceId(int gameInstanceId) {
-		this.gameInstanceId = gameInstanceId;
-	}
-
-	public int getTeam() {
-		return team;
-	}
-
-	public void setTeam(int team) {
-		this.team = team;
-	}
-
-	public int getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(int player) {
-		this.player = player;
-	}
-
+	
 }
+
+class StompSessionHandler extends StompSessionHandlerAdapter {
+	
+	private WLCPGameClientSessionHandler sessionHandler;
+	
+	public StompSessionHandler(WLCPGameClientSessionHandler sessionHandler) {
+		this.sessionHandler = sessionHandler;
+	}
+	
+	@Override
+    public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+		sessionHandler.connectedToServer();
+		((WLCPGameClient) sessionHandler.gameClient).connectToGameInstance();
+	}
+}
+

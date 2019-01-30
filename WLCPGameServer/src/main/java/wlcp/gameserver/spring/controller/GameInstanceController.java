@@ -178,8 +178,3 @@ public class GameInstanceController {
 	}
 
 }
-
-class ConnectToGame {
-	public int gameInstanceId;
-	public int team;
-}
