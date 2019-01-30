@@ -143,7 +143,7 @@ public class GameInstanceController {
 				msg.usernameId = usernameId;
 				msg.team = team;
 				msg.player = player;
-				messageTemplate.convertAndSend("/subscription/connectionResult/" + usernameId + "/" + team + "/" + player, instance.userConnect(msg));
+				messageTemplate.convertAndSend("/subscription/connectionResult/" + gameInstanceId + "/" + usernameId + "/" + team + "/" + player, instance.userConnect(msg));
 			}
 		}
 		return null;
@@ -154,7 +154,7 @@ public class GameInstanceController {
 		for(GameInstanceService instance : gameInstances) {
 			if(instance.getGameInstance().getGameInstanceId().equals(gameInstanceId)) {
 			   instance.userDisconnect(team, player);
-			   messageTemplate.convertAndSend("/subscription/disconnectionResult/" + usernameId + "/" + team + "/" + player, new DisconnectResponseMessage());
+			   messageTemplate.convertAndSend("/subscription/disconnectionResult/" + gameInstanceId + "/" + usernameId + "/" + team + "/" + player, new DisconnectResponseMessage());
 			}
 		}
 		return null;
