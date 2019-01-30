@@ -41,6 +41,8 @@ node {
 	        sh "cp WLCPFrontEnd/target/*.war /home/wlcp/tomcat/webapps/WLCPFrontEnd.war"
 	        sh "cp WLCPTestData/target/*.war /home/wlcp/tomcat/webapps/WLCPTestData.war"
 	        sh "cp WLCPWebApp/target/*.war /home/wlcp/tomcat/webapps/WLCPWebApp.war"
+	        sh "cp WLCPWebsite/target/*.war /home/wlcp/tomcat/webapps/WLCPWebsite.war"
+	        sh "cp WLCPGameServer/target/*.jar /home/wlcp/tomcat/webapps/WLCPGameServer/WLCPGameServer.jar"
 	       }
 	   }
   } catch (e) {
