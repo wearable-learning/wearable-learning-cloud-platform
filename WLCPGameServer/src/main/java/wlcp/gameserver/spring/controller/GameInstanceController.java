@@ -1,6 +1,7 @@
 package wlcp.gameserver.spring.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.PostConstruct;
@@ -27,6 +28,7 @@ import wlcp.model.master.GameInstance;
 import wlcp.model.master.GameLobby;
 import wlcp.model.master.Username;
 import wlcp.shared.message.ConnectRequestMessage;
+import wlcp.shared.message.DisconnectResponseMessage;
 import wlcp.shared.message.IMessage;
 import wlcp.shared.message.PlayerAvaliableMessage;
 
@@ -133,7 +135,6 @@ public class GameInstanceController {
 	}
 	
 	@MessageMapping("/gameInstance/{gameInstanceId}/connectToGameInstance/{usernameId}/{team}/{player}")
-	//@SendTo("/topic/connectionResult")
 	public IMessage connectToGameInstance(@DestinationVariable int gameInstanceId, @DestinationVariable String usernameId, @DestinationVariable int team, @DestinationVariable int player) {
 		for(GameInstanceService instance : gameInstances) {
 			if(instance.getGameInstance().getGameInstanceId().equals(gameInstanceId)) {
@@ -142,21 +143,18 @@ public class GameInstanceController {
 				msg.usernameId = usernameId;
 				msg.team = team;
 				msg.player = player;
-				messageTemplate.convertAndSend("/topic/connectionResult/" + usernameId + "/" + team + "/" + player, instance.userConnect(msg));
-				//return instance.userConnect(msg);
+				messageTemplate.convertAndSend("/subscription/connectionResult/" + usernameId + "/" + team + "/" + player, instance.userConnect(msg));
 			}
 		}
 		return null;
 	}
 	
 	@MessageMapping("/gameInstance/{gameInstanceId}/disconnectFromGameInstance/{usernameId}/{team}/{player}")
-	//@SendTo("/topic/disconnectionResult")
-	public String disconnectFromGameInstance(@DestinationVariable int gameInstanceId, @DestinationVariable String usernameId, @DestinationVariable int team, @DestinationVariable int player) {
+	public IMessage disconnectFromGameInstance(@DestinationVariable int gameInstanceId, @DestinationVariable String usernameId, @DestinationVariable int team, @DestinationVariable int player) {
 		for(GameInstanceService instance : gameInstances) {
 			if(instance.getGameInstance().getGameInstanceId().equals(gameInstanceId)) {
 			   instance.userDisconnect(team, player);
-			   messageTemplate.convertAndSend("/topic/disconnectionResult/" + usernameId + "/" + team + "/" + player, "{}");
-			   //return "";
+			   messageTemplate.convertAndSend("/subscription/disconnectionResult/" + usernameId + "/" + team + "/" + player, new DisconnectResponseMessage());
 			}
 		}
 		return null;
@@ -168,13 +166,15 @@ public class GameInstanceController {
 	}
 	
 	@GetMapping("/playersAvaliable/{gameInstanceId}/{usernameId}")
-	public List<PlayerAvaliableMessage> playersAvailable(@PathVariable int gameInstanceId, @PathVariable String usernameId) {
+	public ResponseEntity<List<PlayerAvaliableMessage>> playersAvailable(@PathVariable int gameInstanceId, @PathVariable String usernameId) {
+		Optional<Username> username = usernameRepository.findById(usernameId);
+		if(!username.isPresent()) { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); }
 		for(GameInstanceService gameInstance : gameInstances) {
 			if(gameInstance.getGameInstance().getGameInstanceId().equals(gameInstanceId)) {
-				return gameInstance.getTeamsAndPlayers(usernameId);
+				return ResponseEntity.status(HttpStatus.OK).body(gameInstance.getTeamsAndPlayers(usernameId));
 			}
 		}
-		return null;
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
 }
