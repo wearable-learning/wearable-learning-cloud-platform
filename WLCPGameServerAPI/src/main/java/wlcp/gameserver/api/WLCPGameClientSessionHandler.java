@@ -1,29 +1,20 @@
 package wlcp.gameserver.api;
 
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-
 import wlcp.shared.message.DisplayTextMessage;
 
-public abstract class WLCPGameClientSessionHandler extends StompSessionHandlerAdapter  {
+public abstract class WLCPGameClientSessionHandler  {
 	
-	protected WLCPGameClient gameClient;
+	protected IWLCPGameClient gameClient;
 	
-	public WLCPGameClientSessionHandler(WLCPGameClient gameClient) {
+	public WLCPGameClientSessionHandler(IWLCPGameClient gameClient) {
 		this.gameClient = gameClient;
 	}
-
-	@Override
-    public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-		System.out.println("Connected!");
-		gameClient.connectToGameInstance();
-	}
 	
-	public void connectedToGameInstance() {
-		gameClient.subscribeToChannels();
-		
-	}
+	public abstract void connectedToServer();
+	public abstract void connectedToGameInstance();
+	
+	public abstract void disconnectedFromServer();
+	public abstract void disconnectedFromGameInstance();
 	
 	public abstract void displayTextRequest(DisplayTextMessage msg);
 	public abstract void singleButtonPressRequest();
