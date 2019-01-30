@@ -6,34 +6,12 @@
 		<content>
 			<NavContainer id="virtualDeviceNavContainer">
 			<Page id="initialPage" showHeader="false"></Page>
-			<Page id="selectGameLobby" showHeader="false">
-				<VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center" class="box">
-					<items>
-						<Text text="Select a game lobby (game) to join..." class="sapUiSmallMarginBottom"/>
-						<Select width="12em" placeholder="Game Lobby (Game)" items="{/games}" value="{/mode}">
-							<core:Item key="{key}" text="{gameLobbyName} ({gameName})" />
-						</Select>
-						<Button width="12em" text="Join" type="Emphasized" press="onLoginPress"></Button>
-					</items>
-				</VBox>
-			</Page>
 			<Page id="selectGameInstance" showHeader="false">
 				<VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center" class="box">
 					<items>
 						<Text text="Please enter your game PIN" class="sapUiSmallMarginBottom"/>
 						<Input id="gamePinInput" width="12em" placeholder="Game PIN"/>
 						<Button width="12em" text="Join" type="Emphasized" press="joinGameInstance"></Button>
-					</items>
-				</VBox>
-			</Page>
-			<Page id="selectTeam" showHeader="false">
-				<VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center" class="box">
-					<items>
-						<Text text="Select a team to join..." class="sapUiSmallMarginBottom"/>
-						<Select width="12em" placeholder="Team" items="{/teams}" value="{/mode}">
-							<core:Item key="{key}" text="{teamNumber}" />
-						</Select>
-						<Button width="12em" text="Join" type="Emphasized" press="onTeamJoinPress"></Button>
 					</items>
 				</VBox>
 			</Page>
@@ -57,18 +35,7 @@
 					</layoutData>
 				</Text>
 				<ToolbarSpacer />
-				<!-- <f:Avatar displaySize="XS" initials="MM" press="handleAvatarPress"/> -->
 				<Button text="Disconnect" icon="sap-icon://disconnected" press="disconnectPressed"></Button>
-<!-- 				<Button text="Username" type="Transparent" press="onUserNamePress">
-					<layoutData>
-						<OverflowToolbarLayoutData priority="NeverOverflow" />
-					</layoutData>
-				</Button>
-				<Button text="Log Off" type="Transparent" press="onUserNamePress">
-					<layoutData>
-						<OverflowToolbarLayoutData priority="NeverOverflow" />
-					</layoutData>
-				</Button> -->
 			</tnt:ToolHeader>
 			<l:Splitter id="mainSplitter" orientation="Vertical" height="100%" width="100%">
 				<NavContainer id="outputContainer">

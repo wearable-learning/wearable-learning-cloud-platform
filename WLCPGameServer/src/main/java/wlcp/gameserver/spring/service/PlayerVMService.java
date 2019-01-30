@@ -126,13 +126,13 @@ public class PlayerVMService extends Thread {
 	public void DisplayText(String text) {
 		DisplayTextMessage msg = new DisplayTextMessage();
 		msg.displayText = text;
-		messageTemplate.convertAndSend("/topic/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/displayText/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/displayText/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 	}
 	
 	public int SingleButtonPress(String[] buttons, int[] transitions) throws ScriptException {
 		block = true;
 		SingleButtonPressMessage msg = new SingleButtonPressMessage();
-		messageTemplate.convertAndSend("/topic/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/singleButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/singleButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
 		int state;
 		while((state = block()) == -2) {}
@@ -149,7 +149,7 @@ public class PlayerVMService extends Thread {
 	public int SequenceButtonPress(String[] buttons, int[] transitions) {
 		block = true;
 		SequenceButtonPressMessage msg = new SequenceButtonPressMessage();
-		messageTemplate.convertAndSend("/topic/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/sequenceButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/sequenceButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
 		int state;
 		while((state = block()) == -2) {}
@@ -171,7 +171,7 @@ public class PlayerVMService extends Thread {
 	public int KeyboardInput(String[] keyboardInput, int[] transitions) {
 		block = true;
 		KeyboardInputMessage msg = new KeyboardInputMessage();
-		messageTemplate.convertAndSend("/topic/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/keyboardInputRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/keyboardInputRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
 		int state;
 		while((state = block()) == -2) {}
