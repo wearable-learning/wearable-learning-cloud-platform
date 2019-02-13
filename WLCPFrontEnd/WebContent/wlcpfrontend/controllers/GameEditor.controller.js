@@ -502,6 +502,10 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		GameEditor.resetScroll();
 	},
 	
+	onGotoLogin: function() {
+		
+		var mylocation = location; mylocation.reload();
+	},
 /**
 * Called when a controller is instantiated and its View controls (if available) are already created.
 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.

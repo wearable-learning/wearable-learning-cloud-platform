@@ -24,13 +24,15 @@ public class LoginController {
 
 	@PostMapping(value="/userLogin")
 	@ResponseBody
-	public Username login(@RequestBody UserDto user) { 
+	public ResponseEntity<Boolean> login(@RequestBody UserDto user) { 
 		Username username = entityManager.find(Username.class, user.getUsername());
 		if(username!=null) {
-			return username;
+			
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		}
 		else {
-			return new Username();
+			
+			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 		}
 		
 	}

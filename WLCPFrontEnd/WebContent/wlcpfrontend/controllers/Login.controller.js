@@ -87,7 +87,7 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 	oDataSuccess : function(oData) {
 		var usernameFound = false;
 		
-		if(oData!=null && oData.usernameId) {
+		if(oData!=null && oData == true) {
 			
 			this.onLoginPress();
 			usernameFound = true;
