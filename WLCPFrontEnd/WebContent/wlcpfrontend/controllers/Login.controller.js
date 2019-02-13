@@ -32,12 +32,7 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		username: ""
 	},
 	
-	newUserModelData : {
-		username: ""
-	},
-	
 	userModel : new sap.ui.model.json.JSONModel(),
-	newUserModel : new sap.ui.model.json.JSONModel(),
 	
 	onLoginPress: function() {
 		this.userModelData.username = this.modelData.username.toLowerCase();
@@ -70,30 +65,18 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 	
 	validateLogin : function() {
 		var oDataModel = ODataModel.getODataModel();
-		this.newUserModelData.username = this.modelData.username.toLowerCase();
-		//this.newUserModelData.password = this.modelData.password;
-		this.newUserModel.setData(this.newUserModelData);
-		
-		$.ajax({headers : { 'Accept': 'application/json', 'Content-Type': 'application/json'},
-			url: ODataModel.getWebAppURL() + "/Rest/Controllers/userLogin",
-			type: 'POST',
-			dataType: 'json',
-			data: this.newUserModel.getJSON(),
-			success : $.proxy(this.oDataSuccess, this),
-			error : $.proxy(this.oDataError, this)
-			});
+		oDataModel.read("/Usernames", {success : $.proxy(this.oDataSuccess, this), error : $.proxy(this.oDataError, this)});
 	},
 	
 	oDataSuccess : function(oData) {
 		var usernameFound = false;
-		
-		if(oData!=null && oData.usernameId) {
-			
-			this.onLoginPress();
-			usernameFound = true;
-			
+		for(var i = 0; i < oData.results.length; i++) {
+			if(this.modelData.username.toLowerCase() == oData.results[i].UsernameId) {
+				this.onLoginPress();
+				usernameFound = true;
+				break;
+			}
 		}
-		
 		if(!usernameFound) {
 			sap.m.MessageBox.error("Login Credentials Incorrect!");
 		}
