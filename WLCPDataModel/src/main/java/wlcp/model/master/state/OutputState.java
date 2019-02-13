@@ -28,7 +28,7 @@ public class OutputState extends State implements Serializable {
 	@ElementCollection
     @CollectionTable(name = "DISPLAY_TEXT_MAP")
     @MapKeyColumn(name = "SCOPE")
-    @Column(name = "DISPLAY_TEXT")
+    @Column(name = "DISPLAY_TEXT", length = 2048)
 	private Map<String, String> displayText = new HashMap<String, String>();
 
 	public OutputState() {
