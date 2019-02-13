@@ -132,8 +132,8 @@ public class PlayerVMService extends Thread {
 	public int SingleButtonPress(String[] buttons, int[] transitions) throws ScriptException {
 		block = true;
 		SingleButtonPressMessage msg = new SingleButtonPressMessage();
-		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/singleButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/singleButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		int state;
 		while((state = block()) == -2) {}
 		if(state != -2 && state != -1) { return state; }
@@ -149,8 +149,8 @@ public class PlayerVMService extends Thread {
 	public int SequenceButtonPress(String[] buttons, int[] transitions) {
 		block = true;
 		SequenceButtonPressMessage msg = new SequenceButtonPressMessage();
-		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/sequenceButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/sequenceButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		int state;
 		while((state = block()) == -2) {}
 		if(state != -2 && state != -1) { return state; }
@@ -171,8 +171,8 @@ public class PlayerVMService extends Thread {
 	public int KeyboardInput(String[] keyboardInput, int[] transitions) {
 		block = true;
 		KeyboardInputMessage msg = new KeyboardInputMessage();
-		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/keyboardInputRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/keyboardInputRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		int state;
 		while((state = block()) == -2) {}
 		if(state != -2 && state != -1) { return state; }
