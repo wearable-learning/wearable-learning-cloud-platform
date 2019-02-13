@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import wlcp.model.master.Username;
-import wlcp.webapp.entity.User;
+import wlcp.webapp.dto.UserDto;
 
 @Controller
 @RequestMapping("/Controllers")
@@ -24,7 +24,7 @@ public class LoginController {
 
 	@PostMapping(value="/userLogin")
 	@ResponseBody
-	public Username login(@RequestBody User user) { 
+	public Username login(@RequestBody UserDto user) { 
 		Username username = entityManager.find(Username.class, user.getUsername());
 		if(username!=null) {
 			return username;

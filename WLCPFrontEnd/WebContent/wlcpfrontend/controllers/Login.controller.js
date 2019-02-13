@@ -33,8 +33,7 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 	},
 	
 	newUserModelData : {
-		username: "",
-		password: ""
+		username: ""
 	},
 	
 	userModel : new sap.ui.model.json.JSONModel(),
@@ -72,7 +71,7 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 	validateLogin : function() {
 		var oDataModel = ODataModel.getODataModel();
 		this.newUserModelData.username = this.modelData.username.toLowerCase();
-		this.newUserModelData.password = this.modelData.password;
+		//this.newUserModelData.password = this.modelData.password;
 		this.newUserModel.setData(this.newUserModelData);
 		
 		$.ajax({headers : { 'Accept': 'application/json', 'Content-Type': 'application/json'},
