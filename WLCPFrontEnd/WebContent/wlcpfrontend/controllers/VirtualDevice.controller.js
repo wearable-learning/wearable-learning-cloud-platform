@@ -97,11 +97,11 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 	    	}
 	    	that.team = jsonResponse.team;
 	    	that.player = jsonResponse.player;
-	    	that.subscribeToChannels(gameInstanceId, team, player);
 	    	that.connectionResultSubscription.unsubscribe();
 			var navContainer = sap.ui.getCore().byId("virtualDevice--virtualDeviceNavContainer");
 			navContainer.to(sap.ui.getCore().byId("virtualDevice--virtualDevicePage"));	
 	    });
+    	this.subscribeToChannels(gameInstanceId, team, player);
 	    this.stompClient.send("/app/gameInstance/" + gameInstanceId + "/connectToGameInstance/" + this.username + "/" + team + "/" + player, {}, "{}");
 	},
 	
