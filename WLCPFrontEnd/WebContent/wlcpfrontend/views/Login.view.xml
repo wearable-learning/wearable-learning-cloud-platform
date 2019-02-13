@@ -7,8 +7,9 @@
 			<VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center" class="box">
 				<items>
 					<Text text="Wearable Learning Cloud Platform" class="sapUiSmallMarginBottom"/>
-					<Input width="12em" id="uid" placeholder="Username" value="{/username}"></Input>
-					<Input width="12em" id="pasw" placeholder="Password" value="{/password}" type="Password"></Input>
+					<Input width="12em" id="uid" placeholder="Username" value="{/username}" autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off"></Input>
+					<Input width="12em" id="pasw" placeholder="Password" value="{/password}" type="Password" autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off">
+					</Input>
 					<ComboBox width="12em" placeholder="Mode" items="{/items}" value="{/mode}">
 						<core:Item key="{key}" text="{text}" />
 					</ComboBox>
