@@ -65,7 +65,6 @@ var Index = {
 		jQuery.sap.require("wlcpfrontend/javascript/jsplumb");
 		jQuery.sap.require("wlcpfrontend/javascript/jquery-ui-touch-punch-min");
 		jQuery.sap.require("wlcpfrontend/javascript/path-data-polyfill");
-		jQuery.sap.require("wlcpfrontend/javascript/bytebuffer");
 		jQuery.sap.require("wlcpfrontend/javascript/sockjs-min");
 		jQuery.sap.require("wlcpfrontend/javascript/stomp-min");
 		
