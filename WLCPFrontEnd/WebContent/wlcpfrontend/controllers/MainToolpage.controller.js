@@ -183,6 +183,10 @@ sap.ui.controller("wlcpfrontend.controllers.MainToolpage", {
 */
 	onInit: function() {
 		
+		window.onbeforeunload = function() {
+			return "Are you sure you want to leave this page? You will lose all unsaved data!";
+		};
+		
 		//Setup the data model
 		//this.model.setData(this.data);
 		this.model.loadData("wlcpfrontend/model/Dashboard.json");

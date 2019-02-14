@@ -217,6 +217,11 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
  * @memberOf wlcpfrontend.views.VirtualDevice
  */
 	onInit: function() {
+		
+		window.onbeforeunload = function() {
+			return "Are you sure you want to leave this page? You will lose all unsaved data!";
+		};
+		
 		this.getView().addEventDelegate({
 			  onAfterRendering: function(){
 				  if(!this.debugMode) {
