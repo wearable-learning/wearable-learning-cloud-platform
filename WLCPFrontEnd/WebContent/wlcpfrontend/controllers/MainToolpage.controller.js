@@ -151,6 +151,11 @@ sap.ui.controller("wlcpfrontend.controllers.MainToolpage", {
 		toolPage.setSideExpanded(!toolPage.getSideExpanded());
 	},
 	
+	onGotoLogin: function() {
+
+		var mylocation = location; mylocation.reload();
+	},
+	
 	/**
 	 * Called when the user clicks on the avatar icon
 	 * @memberOf wlcpfrontend.View
