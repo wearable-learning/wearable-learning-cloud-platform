@@ -1,5 +1,10 @@
 package wlcp.frontend.test;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +15,7 @@ import javax.persistence.Persistence;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -18,9 +24,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 import wlcp.frontend.test.helpers.EmbeddedTomcat;
 import wlcp.model.master.Username;
@@ -54,6 +57,16 @@ public class TestLogin {
 		}
 	}
 	
+	@Before
+	public void setup() {
+		if(driver != null) {
+			driver.quit();
+		}
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless", "--remote-debugging-port=9222");
+	    driver = new ChromeDriver(chromeOptions);
+	}
+	
 	private static void SetupJPA() {
 		File[] files = new File(System.getProperty("java.io.tmpdir") + "WLCPWebApp/WEB-INF/lib/").listFiles();
 		for(File f : files) {
@@ -85,7 +98,7 @@ public class TestLogin {
 
 	@Test
 	public void basicLoginPositive() throws InterruptedException {
-		 driver.navigate().to("http://127.0.0.1:" + tomcat.getPort() + "/WLCPFrontEnd");
+		driver.navigate().to("http://127.0.0.1:" + tomcat.getPort() + "/WLCPFrontEnd");
 		driver.findElement(By.id("idView1--uid-inner")).sendKeys("test");
 		driver.findElement(By.id("idView1--pasw-inner")).sendKeys("password");
 		driver.findElement(By.id("__box0-inner")).sendKeys("Game Editor");
