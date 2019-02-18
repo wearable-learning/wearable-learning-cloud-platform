@@ -151,6 +151,11 @@ sap.ui.controller("wlcpfrontend.controllers.MainToolpage", {
 		toolPage.setSideExpanded(!toolPage.getSideExpanded());
 	},
 	
+	onGotoLogin: function() {
+
+		var mylocation = location; mylocation.reload();
+	},
+	
 	/**
 	 * Called when the user clicks on the avatar icon
 	 * @memberOf wlcpfrontend.View
@@ -177,6 +182,10 @@ sap.ui.controller("wlcpfrontend.controllers.MainToolpage", {
 * @memberOf wlcpfrontend.View
 */
 	onInit: function() {
+		
+		window.onbeforeunload = function() {
+			return "Are you sure you want to leave this page? You will lose all unsaved data!";
+		};
 		
 		//Setup the data model
 		//this.model.setData(this.data);
