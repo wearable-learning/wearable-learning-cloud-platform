@@ -44,24 +44,15 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		this.userModel.setData(this.userModelData);
 		switch(this.modelData.mode) {
 		case "Game Manager": 
-			var app = sap.ui.getCore().byId("app1");
-			var page = sap.ui.view({id:"mainToolPage", viewName:"wlcpfrontend.views.MainToolpage", type:sap.ui.core.mvc.ViewType.XML});
-			app.addPage(page);
-			app.to(page.getId());
+			Index.switchToGameManager();
 			break;
 		case "Game Editor":
-			var app = sap.ui.getCore().byId("app1");
-			var page = sap.ui.view({id:"gameEditor", viewName:"wlcpfrontend.views.GameEditor", type:sap.ui.core.mvc.ViewType.XML});
-			app.addPage(page);
-			app.to(page.getId());
+			Index.switchToGameEditor();
 			break;
 		case "Player":
-			var app = sap.ui.getCore().byId("app1");
-			var page = sap.ui.view({id:"virtualDevice", viewName:"wlcpfrontend.views.VirtualDevice", type:sap.ui.core.mvc.ViewType.XML});
-			page.getController().debugMode = false;
-			page.getController().initVirtualDevice();
-			app.addPage(page);
-			app.to(page.getId());
+			Index.switchToGamePlayer();
+			Index.gamePlayerPage.getController().debugMode = false;
+			Index.gamePlayerPage.getController().initVirtualDevice();
 			break;
 		default:
 			break;
