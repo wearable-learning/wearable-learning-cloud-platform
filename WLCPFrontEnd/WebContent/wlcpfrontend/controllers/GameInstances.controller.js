@@ -49,8 +49,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameInstances", {
 	
 	transpileSuccess : function() {
 		var gameId = sap.ui.getCore().byId("gameInstanceGame").getSelectedKey();
-		var gameLobbyId = 1;
-		$.ajax({url : "http://" + ServerConfig.getServerAddress() + "/controllers/startGameInstance/" + gameId + "/" + gameLobbyId + "/" + sap.ui.getCore().getModel("user").oData.username, success : $.proxy(this.gameInstanceStarted, this), error : $.proxy(this.gameInstanceStartError, this)});
+		$.ajax({url : "http://" + ServerConfig.getServerAddress() + "/controllers/startGameInstance/" + gameId + "/" + sap.ui.getCore().getModel("user").oData.username, success : $.proxy(this.gameInstanceStarted, this), error : $.proxy(this.gameInstanceStartError, this)});
 	},
 	
 	transpileError : function() {
