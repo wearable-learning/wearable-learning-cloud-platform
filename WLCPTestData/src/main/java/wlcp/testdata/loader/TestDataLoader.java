@@ -15,10 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 
-import wlcp.testdata.entities.GameLobbyEntity;
-import wlcp.testdata.entities.GameLobbyUsernameEntity;
 import wlcp.testdata.entities.UsernameEntity;
-import wlcp.testdata.entities.UsernameGameLobbyEntity;
 
 /**
  * Servlet implementation class TestDataLoader
@@ -56,9 +53,6 @@ public class TestDataLoader extends HttpServlet {
 		EntityManager manager = factory.createEntityManager();
 		
 		DataLoaderFactory.LoadData(new UsernameEntity(getServletContext().getResource("/TestData/Username.csv").getPath()), manager);
-		DataLoaderFactory.LoadData(new GameLobbyEntity(getServletContext().getResource("/TestData/GameLobby.csv").getPath()), manager);
-		DataLoaderFactory.LoadData(new UsernameGameLobbyEntity(getServletContext().getResource("/TestData/UsernameGameLobby.csv").getPath()), manager);
-		DataLoaderFactory.LoadData(new GameLobbyUsernameEntity(getServletContext().getResource("/TestData/GameLobbyUsernames.csv").getPath()), manager);
 		
 		manager.close();
 		factory.close();

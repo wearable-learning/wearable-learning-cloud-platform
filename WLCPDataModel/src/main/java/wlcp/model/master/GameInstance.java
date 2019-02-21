@@ -18,10 +18,6 @@ public class GameInstance implements Serializable {
 	@Column(name = "GAME_INSTANCE_ID")
 	private Integer gameInstanceId;
 	
-	@OneToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "GAME_LOBBY", referencedColumnName = "GAME_LOBBY_ID")
-	private GameLobby gameLobby;
-	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "GAME", referencedColumnName = "GAME_ID")
 	private Game game;
@@ -37,9 +33,8 @@ public class GameInstance implements Serializable {
 		super();
 	}
 
-	public GameInstance(GameLobby gameLobby, Game game, Username username, boolean debugInstance) {
+	public GameInstance(Game game, Username username, boolean debugInstance) {
 		super();
-		this.gameLobby = gameLobby;
 		this.game = game;
 		this.username = username;
 		this.debugInstance = debugInstance;
@@ -51,14 +46,6 @@ public class GameInstance implements Serializable {
 
 	public void setGameInstanceId(Integer gameInstanceId) {
 		this.gameInstanceId = gameInstanceId;
-	}
-
-	public GameLobby getGameLobby() {
-		return gameLobby;
-	}
-
-	public void setGameLobby(GameLobby gameLobby) {
-		this.gameLobby = gameLobby;
 	}
 
 	public Game getGame() {
