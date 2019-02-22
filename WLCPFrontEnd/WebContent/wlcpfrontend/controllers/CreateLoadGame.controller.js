@@ -20,6 +20,30 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		
 	},
 	
+	onPChange: function (oEvent) {
+		
+			pCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
+			tCount = GameEditor.getEditorController().newGameModel.TeamCount;
+			if(pCount+tCount > 9){
+				GameEditor.getEditorController().newGameModel.PlayersPerTeam = pCount-1;
+				sap.m.MessageBox.error("Team + Player value cannot be greater than 9 ");
+			}
+			
+	},
+	
+	onTChange: function (oEvent) {
+					
+			pCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
+			tCount = GameEditor.getEditorController().newGameModel.TeamCount;
+			
+			if(pCount+tCount > 9){
+				GameEditor.getEditorController().newGameModel.TeamCount = tCount-1;
+				sap.m.MessageBox.error("Team + Player value cannot be greater than 9 ");
+			}
+			
+	},
+	
+	
 	cancelCreateLoadGame : function() {
 		sap.ui.getCore().byId("createLoadGame").close();
 		sap.ui.getCore().byId("createLoadGame").destroy();
