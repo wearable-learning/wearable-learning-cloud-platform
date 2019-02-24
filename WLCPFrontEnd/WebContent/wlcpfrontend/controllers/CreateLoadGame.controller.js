@@ -20,7 +20,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		
 	},
 	
-	onPChange: function (oEvent) {
+	onPlayerChange: function (oEvent) {
 		
 			pCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
 			tCount = GameEditor.getEditorController().newGameModel.TeamCount;
@@ -31,7 +31,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 			
 	},
 	
-	onTChange: function (oEvent) {
+	onTeamChange: function (oEvent) {
 					
 			pCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
 			tCount = GameEditor.getEditorController().newGameModel.TeamCount;
