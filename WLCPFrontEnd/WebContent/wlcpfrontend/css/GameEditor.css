@@ -115,8 +115,8 @@ html.sap-desktop .sapMSlt.sapMTSSlt, html.sap-tablet .sapMSlt.sapMTSSlt {
 
 /* Transition */
 .transition {
-	height:62.5px;
-    width: 75px;
+	height:67.5px;
+    width: 80px;
     float: left;
     position: absolute;
     background-color: #5E696E;
@@ -139,6 +139,7 @@ html.sap-desktop .sapMSlt.sapMTSSlt, html.sap-tablet .sapMSlt.sapMTSSlt {
 	top: 50%;
   	transform: translateY(-50%);
  	color:#FFFFFF;
+ 	font-weight: bold;
 }
 
 /* State */
@@ -217,7 +218,7 @@ html.sap-desktop .sapMSlt.sapMTSSlt, html.sap-tablet .sapMSlt.sapMTSSlt {
 .startStateTopColor {
 	height: 90px;
 	width: 90px;
-	background-color: #bfbfbf; /*#D3D7D9;*/
+	background-color: #ABE2AB; /*#D3D7D9;*/
 	border-radius: 50px 50px 50px 50px;
 }
 
