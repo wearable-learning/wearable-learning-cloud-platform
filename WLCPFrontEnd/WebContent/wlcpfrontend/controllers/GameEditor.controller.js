@@ -355,6 +355,14 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		sap.m.MessageBox.error("There was an error loading the game!");
 		this.busy.close();
 	},
+	
+	reloadGame : function(gameId) {
+		var filters = [];
+		filters.push(new sap.ui.model.Filter({path: "GameId", operator: sap.ui.model.FilterOperator.EQ, value1: gameId}));
+		ODataModel.getODataModel().read("/Games", {filters : filters, success : $.proxy(function(oData) {
+			this.loadFromManager(oData.results[0]);
+		}, this), error: this.loadGameError});
+	},
 
 	saveGame : function() {
 		
@@ -486,6 +494,100 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		this.debuggerWindow.DebuggerWindow.initDebugger();
 	},
 	
+	openGameOptions : function(oEvent) {
+		if(!this.gameOptionsPopover) {
+			this.gameOptionsPopover = sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.GameOptions", this);
+			this.getView().addDependent(this.gameOptionsPopover);
+		}
+		this.gameOptionsPopover.openBy(oEvent.getSource());
+	},
+	
+	copyGame : function(oEvent) {
+		var dialog = new sap.m.Dialog({
+			title : "Copy Game",
+			content : new sap.m.Input({
+				placeholder : "New Game Name"
+			}),
+			beginButton : new sap.m.Button({
+				text : "Copy Game",
+				type : sap.m.ButtonType.Accept,
+				press : $.proxy(function(oAction) {
+					var newGameId = oAction.oSource.getParent().mAggregations.content[0].getValue();
+					$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/copyGame?gameId=" + this.gameModel.GameId + "&newGameId=" + newGameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function(data) {
+						sap.m.MessageToast.show("Game Copied!");
+						dialog.close();
+						this.reloadGame(newGameId);
+					}, this), error : $.proxy(function(data) {
+						dialog.close();
+						sap.m.MessageToast.show(data.responseText);
+					}, this)});
+				}, this)
+			}),
+			endButton : new sap.m.Button({
+				text : "Cancel",
+				type : sap.m.ButtonType.Reject,
+				press : function() {
+					dialog.close();
+				}
+			}),
+			afterClose : function() {
+				dialog.destroy();
+			}
+		});
+		dialog.open();
+	},
+	
+	renameGame : function(oEvent) {
+		var dialog = new sap.m.Dialog({
+			title : "Rename Game",
+			content : new sap.m.Input({
+				placeholder : "New Game Name"
+			}),
+			beginButton : new sap.m.Button({
+				text : "Rename Game",
+				type : sap.m.ButtonType.Accept,
+				press : $.proxy(function(oAction) {
+					var newGameId = oAction.oSource.getParent().mAggregations.content[0].getValue();
+					$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/renameGame?gameId=" + this.gameModel.GameId + "&newGameId=" + newGameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function(data) {
+						sap.m.MessageToast.show("Game Renamed!");
+						dialog.close();
+						this.reloadGame(newGameId);
+					}, this), error : $.proxy(function(data) {
+						dialog.close();
+						sap.m.MessageToast.show(data.responseText);
+					}, this)});
+				}, this)
+			}),
+			endButton : new sap.m.Button({
+				text : "Cancel",
+				type : sap.m.ButtonType.Reject,
+				press : function() {
+					dialog.close();
+				}
+			}),
+			afterClose : function() {
+				dialog.destroy();
+			}
+		});
+		dialog.open();
+	},
+	
+	deleteGame : function(oEvent) {
+		sap.m.MessageBox.confirm("Are you sure you want to delete the game?", { icon : sap.m.MessageBox.Icon.WARNING, onClose : $.proxy(function(oAction) {
+			if(oAction == sap.m.MessageBox.Action.OK) {
+				$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/deleteGame?gameId=" + this.gameModel.GameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function() {
+					this.resetEditor();
+					sap.ui.getCore().byId("gameEditor--saveButton").setEnabled(false);
+					sap.ui.getCore().byId("gameEditor--runButton").setEnabled(false);
+					sap.ui.getCore().byId("gameEditor--optionsButton").setEnabled(false);
+					sap.m.MessageToast.show("The game has been deleted!")
+				}, this), error : $.proxy(function(data) {
+					sap.m.MessageToast.show(data.responseText);
+				}, this)});
+			}
+		}, this)});
+	},
+	
 	resetEditor : function() {
 		for(var i = 0; i < this.stateList.length; i++) {
 			this.jsPlumbInstance.remove(this.stateList[i].htmlId);
@@ -498,6 +600,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		
 		sap.ui.getCore().byId("gameEditor--saveButton").setEnabled(true);
 		sap.ui.getCore().byId("gameEditor--runButton").setEnabled(true);
+		sap.ui.getCore().byId("gameEditor--optionsButton").setEnabled(true);
 		
 		GameEditor.resetScroll();
 	},

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,30 +15,68 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import wlcp.model.master.Game;
+import wlcp.model.master.Username;
 import wlcp.model.master.connection.Connection;
 import wlcp.model.master.state.OutputState;
 import wlcp.model.master.state.StartState;
 import wlcp.model.master.state.State;
 import wlcp.model.master.state.StateType;
-import wlcp.model.master.transition.KeyboardInput;
-import wlcp.model.master.transition.SequenceButtonPress;
-import wlcp.model.master.transition.SingleButtonPress;
 import wlcp.model.master.transition.Transition;
 
 @Controller
 @RequestMapping("/Controllers")
-public class CopyGameController {
+public class CopyRenameDeleteGameController {
 	
 	@Inject
 	EntityManager entityManager;
 	
 	@GetMapping(value="/copyGame")
 	@Transactional
-	public ResponseEntity<?> copyGame(@RequestParam("gameId") String gameId, @RequestParam("newGameId") String newGameId) {
+	public ResponseEntity<?> copyGame(@RequestParam("gameId") String gameId, @RequestParam("newGameId") String newGameId, @RequestParam("usernameId") String usernameId) {
 		
+		if(entityManager.find(Game.class, newGameId) != null) {
+			return new ResponseEntity<String>("New name already exists!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		recreateGame(gameId, newGameId, usernameId);
+		
+		return new ResponseEntity<String>("", HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/renameGame")
+	@Transactional
+	public ResponseEntity<?> renameGame(@RequestParam("gameId") String gameId, @RequestParam("newGameId") String newGameId, @RequestParam("usernameId") String usernameId) {
 		Game game = entityManager.getReference(Game.class, gameId);
 		
-		Game newGame = new Game(game.getGameId().replace(gameId, newGameId), game.getTeamCount(), game.getPlayersPerTeam(), game.getUsername(), game.getVisibility(), game.getDataLog());
+		if(game.getUsername().getUsernameId().equals(usernameId)) {
+			recreateGame(gameId, newGameId, usernameId);
+			deleteGame(gameId, usernameId);
+			return new ResponseEntity<String>("Success!", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("You must own the game to rename it!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	@GetMapping(value="/deleteGame")
+	@Transactional
+	public ResponseEntity<?> deleteGame(@RequestParam("gameId") String gameId, @RequestParam("usernameId") String usernameId) {
+		Game game = entityManager.getReference(Game.class, gameId);
+		
+		if(game.getUsername().getUsernameId().equals(usernameId)) {
+			entityManager.remove(game);
+			return new ResponseEntity<String>("Success!", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("You must own the game to delete it!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	private void recreateGame(String gameId, String newGameId, String usernameId) {
+		
+		Game game = entityManager.getReference(Game.class, gameId);
+		Username username = entityManager.getReference(Username.class, usernameId);
+		
+		Game newGame = new Game(game.getGameId().replace(gameId, newGameId), game.getTeamCount(), game.getPlayersPerTeam(), username, game.getVisibility(), game.getDataLog());
 		newGame.setStateIdCount(game.getStateIdCount());
 		newGame.setConnectionIdCount(game.getConnectionIdCount());
 		newGame.setTransitionIdCount(game.getTransitionIdCount());
@@ -98,8 +137,6 @@ public class CopyGameController {
 			newTransition.setConnection(entityManager.getReference(Connection.class, transition.getConnection().getConnectionId().replace(gameId, newGameId)));
 			entityManager.persist(newTransition);
 		}
-		
-		return null;
 	}
 		
 
