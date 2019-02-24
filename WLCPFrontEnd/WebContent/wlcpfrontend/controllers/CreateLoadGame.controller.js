@@ -133,6 +133,6 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	 * and error message will be shown.
 	 */
 	createGameError : function(oError) {
-		sap.m.MessageBox.error("There was an error creating a game.");
+		sap.m.MessageBox.error("There was an error creating the game. Make sure the name does not already exist!");
 	}
 });
