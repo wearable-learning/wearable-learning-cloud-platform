@@ -22,10 +22,10 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	
 	onPlayerChange: function (oEvent) {
 		
-			pCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
-			tCount = GameEditor.getEditorController().newGameModel.TeamCount;
-			if(pCount+tCount > 9){
-				GameEditor.getEditorController().newGameModel.PlayersPerTeam = pCount-1;
+			var playerCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
+			var teamCount = GameEditor.getEditorController().newGameModel.TeamCount;
+			if(playerCount+teamCount > 9){
+				GameEditor.getEditorController().newGameModel.PlayersPerTeam = playerCount-1;
 				sap.m.MessageBox.error("Team + Player value cannot be greater than 9 ");
 			}
 			
@@ -33,11 +33,11 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	
 	onTeamChange: function (oEvent) {
 					
-			pCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
-			tCount = GameEditor.getEditorController().newGameModel.TeamCount;
+			var playerCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
+			var teamCount = GameEditor.getEditorController().newGameModel.TeamCount;
 			
-			if(pCount+tCount > 9){
-				GameEditor.getEditorController().newGameModel.TeamCount = tCount-1;
+			if(playerCount+teamCount > 9){
+				GameEditor.getEditorController().newGameModel.TeamCount = teamCount-1;
 				sap.m.MessageBox.error("Team + Player value cannot be greater than 9 ");
 			}
 			
