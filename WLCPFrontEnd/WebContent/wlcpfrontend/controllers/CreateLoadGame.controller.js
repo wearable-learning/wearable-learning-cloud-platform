@@ -20,26 +20,34 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		
 	},
 	
+	getMaxPlayer : function (max, teamCount) {
+		  return Math.floor(max / teamCount);
+		},
+		
 	onPlayerChange: function (oEvent) {
 		
-			var playerCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
-			var teamCount = GameEditor.getEditorController().newGameModel.TeamCount;
-			if(playerCount+teamCount > 9){
-				GameEditor.getEditorController().newGameModel.PlayersPerTeam = playerCount-1;
-				sap.m.MessageBox.error("Team + Player value cannot be greater than 9 ");
-			}
+		var playerCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
+		var teamCount = GameEditor.getEditorController().newGameModel.TeamCount;
+		
+		var maxPlayerValue = this.getMaxPlayer(9, teamCount)
+		if(playerCount > maxPlayerValue){
+			GameEditor.getEditorController().newGameModel.PlayersPerTeam = playerCount - 1;
+			sap.m.MessageBox.error("For " + teamCount +" Team, Player count cannot be greater than "+ maxPlayerValue + " each");
+		}
 			
 	},
 	
+			
 	onTeamChange: function (oEvent) {
 					
-			var playerCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
-			var teamCount = GameEditor.getEditorController().newGameModel.TeamCount;
+		var playerCount = GameEditor.getEditorController().newGameModel.PlayersPerTeam;
+		var teamCount = GameEditor.getEditorController().newGameModel.TeamCount;
 			
-			if(playerCount+teamCount > 9){
-				GameEditor.getEditorController().newGameModel.TeamCount = teamCount-1;
-				sap.m.MessageBox.error("Team + Player value cannot be greater than 9 ");
-			}
+		var maxPlayerValue = this.getMaxPlayer(9, teamCount)
+		if(playerCount > maxPlayerValue){
+			GameEditor.getEditorController().newGameModel.TeamCount = teamCount - 1;
+			sap.m.MessageBox.error("For " + teamCount +" Team, Player count cannot be greater than "+ maxPlayerValue + " each");
+		}
 			
 	},
 	
