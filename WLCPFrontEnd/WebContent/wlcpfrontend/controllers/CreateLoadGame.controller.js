@@ -98,6 +98,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 			GameEditor.getEditorController().gameModel.StateIdCount = GameEditor.getEditorController().newGameModel.StateIdCount;
 			GameEditor.getEditorController().gameModel.TransitionIdCount = GameEditor.getEditorController().newGameModel.TransitionIdCount;
 			GameEditor.getEditorController().gameModel.ConnectionIdCount = GameEditor.getEditorController().newGameModel.ConnectionIdCount;
+			GameEditor.getEditorController().gameModel.Username = oSuccess.Username;
 			GameEditor.getEditorController().newGameModel.GameId = "";
 			GameEditor.getEditorController().newGameModel.TeamCount = 3;
 			GameEditor.getEditorController().newGameModel.PlayersPerTeam = 3;
@@ -121,6 +122,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		GameEditor.getEditorController().gameModel.StateIdCount = oData.results[0].StateIdCount;
 		GameEditor.getEditorController().gameModel.TransitionIdCount = oData.results[0].TransitionIdCount;
 		GameEditor.getEditorController().gameModel.ConnectionIdCount = oData.results[0].ConnectionIdCount;
+		GameEditor.getEditorController().gameModel.Username = oData.results[0].Username;
 		GameEditor.getEditorController().load();
 	},
 	
