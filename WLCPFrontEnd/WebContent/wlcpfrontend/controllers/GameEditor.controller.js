@@ -223,14 +223,13 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		fragment.setModel(ODataModel.getODataModel());
 		fragment.addEventDelegate({
 			  onAfterRendering: function(){
-			        var oBinding = sap.ui.getCore().byId("loadGameComboBox").getBinding("items");
-			        var filter = new sap.ui.model.Filter({
-			        	filters : [new sap.ui.model.Filter("Username", "EQ", sap.ui.getCore().getModel("user").oData.username),
-			        			   new sap.ui.model.Filter("Visibility", "EQ", true)],
-			        	and : false
-			        });
-			        oBinding.filter(filter);
-			        oBinding.filter([new sap.ui.model.Filter("DataLog", "EQ", false)]);
+				    var oBinding = sap.ui.getCore().byId("userLoadGameComboBox").getBinding("items");
+			        oBinding.filter([new sap.ui.model.Filter("Username", "EQ", sap.ui.getCore().getModel("user").oData.username),
+			        				 new sap.ui.model.Filter("DataLog", "EQ", false)]);
+			        
+				    var oBinding = sap.ui.getCore().byId("publicLoadGameComboBox").getBinding("items");
+			        oBinding.filter([new sap.ui.model.Filter("Visibility", "EQ", true),
+			        				 new sap.ui.model.Filter("DataLog", "EQ", false)]);
 			  }
 			}, this);
 		fragment.open();
