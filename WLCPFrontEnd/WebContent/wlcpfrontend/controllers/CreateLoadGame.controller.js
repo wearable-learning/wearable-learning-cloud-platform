@@ -62,8 +62,20 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	},
 	
 	loadGame : function() {
+		var gameToLoad = "";
+		if(sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey() != "" && sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey() != "") {
+			sap.m.MessageBox.error("You cannot load both a personal and public game at the same time! Please select one!");
+			return;
+		} else if(sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey() != "") {
+			gameToLoad = sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey();
+		} else if(sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey() != "") {
+			gameToLoad = sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey();
+		} else {
+			sap.m.MessageBox.error("Please select a game to load!");
+			return;
+		}
 		var filters = [];
-		filters.push(new sap.ui.model.Filter({path: "GameId", operator: sap.ui.model.FilterOperator.EQ, value1: sap.ui.getCore().byId("loadGameComboBox").getSelectedKey()}));
+		filters.push(new sap.ui.model.Filter({path: "GameId", operator: sap.ui.model.FilterOperator.EQ, value1: gameToLoad}));
 		ODataModel.getODataModel().read("/Games", {filters : filters, success : this.loadGameSuccess, error: this.loadGameError});
 		this.cancelLoadGame();
 	},
