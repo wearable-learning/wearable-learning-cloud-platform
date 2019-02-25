@@ -25,6 +25,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		StateIdCount : 0,
 		TransitionIdCount : 0,
 		ConnectionIdCount : 0,
+		Username : "",
 		Visibility : true,
 		DataLog : false
 	},
@@ -253,6 +254,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		GameEditor.getEditorController().gameModel.StateIdCount = gameInfo.StateIdCount;
 		GameEditor.getEditorController().gameModel.TransitionIdCount = gameInfo.TransitionIdCount;
 		GameEditor.getEditorController().gameModel.ConnectionIdCount = gameInfo.ConnectionIdCount;
+		GameEditor.getEditorController().gameModel.Username = gameInfo.Username;
 		GameEditor.getEditorController().load();
 	},
 	
@@ -368,6 +370,16 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		
 		//This is a save without a run
 		this.saveRun = false;
+		
+		//Check to make sure the owner is saving
+		if(this.gameModel.Username != sap.ui.getCore().getModel("user").oData.username) {
+			if(this.saveRun) {
+				return;
+			} else {
+				sap.m.MessageBox.error("You cannot edit someone elses game. Please make a copy!");
+				return;
+			}
+		}
 		
 		//Open the busy dialog
 		this.busy = new sap.m.BusyDialog();
@@ -513,6 +525,10 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 				type : sap.m.ButtonType.Accept,
 				press : $.proxy(function(oAction) {
 					var newGameId = oAction.oSource.getParent().mAggregations.content[0].getValue();
+					if(!newGameId.match(/^[a-zA-Z]+$/)) {
+						sap.m.MessageBox.error("a-z upper case and lower case only game name");
+						return;
+					}
 					$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/copyGame?gameId=" + this.gameModel.GameId + "&newGameId=" + newGameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function(data) {
 						sap.m.MessageToast.show("Game Copied!");
 						dialog.close();
@@ -548,6 +564,10 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 				type : sap.m.ButtonType.Accept,
 				press : $.proxy(function(oAction) {
 					var newGameId = oAction.oSource.getParent().mAggregations.content[0].getValue();
+					if(!newGameId.match(/^[a-zA-Z]+$/)) {
+						sap.m.MessageBox.error("a-z upper case and lower case only game name");
+						return;
+					}
 					$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/renameGame?gameId=" + this.gameModel.GameId + "&newGameId=" + newGameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function(data) {
 						sap.m.MessageToast.show("Game Renamed!");
 						dialog.close();
@@ -629,7 +649,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 				  
 				  //Check to see if we are loading from the game manager
 				  if(this.loadFromEditor != null) {
-					  this.loadFromManager(this.loadFromEditor);
+					  setTimeout($.proxy(function() { this.loadFromManager(this.loadFromEditor) }, this), 1000);
 				  }
 			  }
 			}, this);
