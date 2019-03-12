@@ -70,8 +70,20 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	},
 	
 	loadGame : function() {
+		var gameToLoad = "";
+		if(sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey() != "" && sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey() != "") {
+			sap.m.MessageBox.error("You cannot load both a personal and public game at the same time! Please select one!");
+			return;
+		} else if(sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey() != "") {
+			gameToLoad = sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey();
+		} else if(sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey() != "") {
+			gameToLoad = sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey();
+		} else {
+			sap.m.MessageBox.error("Please select a game to load!");
+			return;
+		}
 		var filters = [];
-		filters.push(new sap.ui.model.Filter({path: "GameId", operator: sap.ui.model.FilterOperator.EQ, value1: sap.ui.getCore().byId("loadGameComboBox").getSelectedKey()}));
+		filters.push(new sap.ui.model.Filter({path: "GameId", operator: sap.ui.model.FilterOperator.EQ, value1: gameToLoad}));
 		ODataModel.getODataModel().read("/Games", {filters : filters, success : this.loadGameSuccess, error: this.loadGameError});
 		this.cancelLoadGame();
 	},
@@ -106,6 +118,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 			GameEditor.getEditorController().gameModel.StateIdCount = GameEditor.getEditorController().newGameModel.StateIdCount;
 			GameEditor.getEditorController().gameModel.TransitionIdCount = GameEditor.getEditorController().newGameModel.TransitionIdCount;
 			GameEditor.getEditorController().gameModel.ConnectionIdCount = GameEditor.getEditorController().newGameModel.ConnectionIdCount;
+			GameEditor.getEditorController().gameModel.Username = oSuccess.Username;
 			GameEditor.getEditorController().newGameModel.GameId = "";
 			GameEditor.getEditorController().newGameModel.TeamCount = 3;
 			GameEditor.getEditorController().newGameModel.PlayersPerTeam = 3;
@@ -129,6 +142,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		GameEditor.getEditorController().gameModel.StateIdCount = oData.results[0].StateIdCount;
 		GameEditor.getEditorController().gameModel.TransitionIdCount = oData.results[0].TransitionIdCount;
 		GameEditor.getEditorController().gameModel.ConnectionIdCount = oData.results[0].ConnectionIdCount;
+		GameEditor.getEditorController().gameModel.Username = oData.results[0].Username;
 		GameEditor.getEditorController().load();
 	},
 	
@@ -141,6 +155,6 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	 * and error message will be shown.
 	 */
 	createGameError : function(oError) {
-		sap.m.MessageBox.error("There was an error creating a game.");
+		sap.m.MessageBox.error("There was an error creating the game. Make sure the name does not already exist!");
 	}
 });
