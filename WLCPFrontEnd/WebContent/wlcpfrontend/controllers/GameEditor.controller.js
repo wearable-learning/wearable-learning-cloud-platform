@@ -610,6 +610,38 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		var mylocation = location; mylocation.reload();
 	},
 	
+	/**
+	 * Called when the user clicks on the switch view icon
+	 * @memberOf wlcpfrontend.View
+	 */
+	switchViewPress : function(oEvent) {
+	
+		//Create and popover
+		if (! this._oPopover) {
+			this._oPopover = sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.PageTransferPopover", this);
+			this.getView().addDependent(this._oPopover);
+			this._oPopover.bindElement("/ProductCollection/0");
+		}
+
+		//Delay before showing
+		var oButton = oEvent.getSource();
+		jQuery.sap.delayedCall(0, this, function () {
+			this._oPopover.openBy(oButton);
+		});
+	},
+	
+	switchToManager : function(evt) {
+		 
+		Index.switchToGameManager();  
+		
+	},
+	
+	switchToPlayer : function(evt) {
+		 
+		Index.switchToGamePlayer();  
+		
+	},
+	
 /**
 * Called when a controller is instantiated and its View controls (if available) are already created.
 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.

@@ -53,6 +53,9 @@
 							<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px" />
 						</layoutData>
 					</ToolbarSpacer>
+					
+					<Button icon = "sap-icon://switch-views" type="Transparent" press="switchViewPress"></Button>
+					
 					<f:Avatar displaySize="XS" initials="MM" press="handleAvatarPress"/>
 					<Button icon = "sap-icon://user-settings" type="Transparent">
 					</Button>
