@@ -68,19 +68,6 @@ var OutputState = class OutputState extends State {
 			return;
 		}
 		
-		//Check to see if previous states are empty
-		var hasEmptyInputState = false;
-		for (var i = 0; i < this.inputConnections.length; i++){
-			if(this.inputConnections.length[i].scopeMask == 0){
-				hasEmptyInputState = true;
-				break;
-			}
-		}
-		if(hasEmptyInputState){
-			sap.m.MessageBox.error("At least one of the previous states is empty. Fill in all the previous states and try again.");
-			return;
-		}
-		
 		//Create an instance of the dialog
 		this.dialog = sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.States.OutputStateConfig", this);
 		
