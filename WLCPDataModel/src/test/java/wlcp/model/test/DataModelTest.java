@@ -1,6 +1,6 @@
 package wlcp.model.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import wlcp.model.master.Game;
-import wlcp.model.master.GameLobby;
 import wlcp.model.master.Username;
 
 public class DataModelTest {
@@ -75,9 +74,7 @@ public class DataModelTest {
 		manager.persist(username);
 		manager.getTransaction().commit();
 		
-		//Add a game lobby
 		username = manager.getReference(Username.class, "username");
-		username.getGameLobbies().add(new GameLobby("gamelobby", username));
 		
 		//Marge the username
 		manager.getTransaction().begin();
@@ -86,30 +83,6 @@ public class DataModelTest {
 		
 		//Test
 		assertEquals(username, manager.getReference(Username.class, "username"));
-	}
-	
-	@Test(expected = javax.persistence.RollbackException.class)
-	public void testGameLobbyWithoutUsername() {
-		
-		//Create a game lobby
-		GameLobby gameLobby = new GameLobby("gamelobby", null);
-		
-		//Persist the lobby
-		manager.getTransaction().begin();
-		manager.persist(gameLobby);
-		manager.getTransaction().commit();
-	}
-	
-	@Test
-	public void testGameLobbyWithUsername() {
-		
-		//Create a game lobby
-		GameLobby gameLobby = new GameLobby("gamelobby", new Username("username", "password", "firstname", "lastname", "email"));
-		
-		//Persist the lobby
-		manager.getTransaction().begin();
-		manager.persist(gameLobby);
-		manager.getTransaction().commit();
 	}
 	
 	@Test

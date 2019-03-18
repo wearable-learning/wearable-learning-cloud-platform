@@ -32,10 +32,6 @@ public class Username implements Serializable {
 	
 	@Column(length = 40, name = "EMAIL_ADDRESS")
 	private String emailAddress;
-	
-	@JoinTable(name = "USERNAME_GAMELOBBIES", joinColumns = @JoinColumn(name = "USERNAME_ID", referencedColumnName = "USERNAME_ID"), inverseJoinColumns = @JoinColumn(name = "GAME_LOBBY", referencedColumnName = "GAME_LOBBY_ID"))
-	@OneToMany(orphanRemoval = true)
-	private List<GameLobby> gameLobbies = new ArrayList<GameLobby>();
 
 	public Username() {
 		super();
@@ -88,14 +84,6 @@ public class Username implements Serializable {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
-	}
-
-	public List<GameLobby> getGameLobbies() {
-		return gameLobbies;
-	}
-
-	public void setGameLobbies(List<GameLobby> gameLobbies) {
-		this.gameLobbies = gameLobbies;
 	}
    
 }

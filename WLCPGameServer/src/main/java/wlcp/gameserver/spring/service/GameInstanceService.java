@@ -25,7 +25,6 @@ import wlcp.gameserver.spring.repository.GameInstanceRepository;
 import wlcp.gameserver.spring.repository.UsernameRepository;
 import wlcp.model.master.Game;
 import wlcp.model.master.GameInstance;
-import wlcp.model.master.GameLobby;
 import wlcp.model.master.Username;
 import wlcp.shared.message.ConnectRequestMessage;
 import wlcp.shared.message.ConnectResponseMessage;
@@ -56,7 +55,6 @@ public class GameInstanceService extends Thread {
 	ApplicationContext context;
 	
 	private Game game;
-	private GameLobby gameLobby;
 	private Username username;
 	private GameInstance gameInstance;
 	private boolean debugInstance;
@@ -66,9 +64,8 @@ public class GameInstanceService extends Thread {
 	
 	private boolean running = true;
 	
-	public void setupVariables(Game game, GameLobby gameLobby, Username username, boolean debugInstance) {
+	public void setupVariables(Game game, Username username, boolean debugInstance) {
 		this.game = game;
-		this.gameLobby = gameLobby;
 		this.username = username;
 		this.debugInstance = debugInstance;
 	}
@@ -90,13 +87,12 @@ public class GameInstanceService extends Thread {
 	private void setup() {
 		gameInstance = gameInstanceRepository.save(new GameInstance());
 		gameInstance.setGame(game);
-		gameInstance.setGameLobby(gameLobby);
 		gameInstance.setUsername(username);
 		gameInstance.setDebugInstance(debugInstance);
 		gameInstanceRepository.save(gameInstance);
 		gameInstanceRepository.flush();
-		if(!gameInstance.isDebugInstance()) { logger.info("Game Instance: " + gameInstance.getGameInstanceId() + " started! Playing the game: " + game.getGameId() + " with the game lobby: " + gameLobby.getGameLobbyName()); }
-		if(gameInstance.isDebugInstance()) { logger.info("Debug Game Instance: " + gameInstance.getGameInstanceId() + " started! Playing the game: " + game.getGameId() + " with the game lobby: " + gameLobby.getGameLobbyName()); }
+		if(!gameInstance.isDebugInstance()) { logger.info("Game Instance: " + gameInstance.getGameInstanceId() + " started! Playing the game: " + game.getGameId()); }
+		if(gameInstance.isDebugInstance()) { logger.info("Debug Game Instance: " + gameInstance.getGameInstanceId() + " started! Playing the game: " + game.getGameId()); }
 		this.setName("WLCP-" + game.getGameId() + "-" + gameInstance.getGameInstanceId());
 	}
 	
@@ -142,7 +138,7 @@ public class GameInstanceService extends Thread {
 		players.add(player);
 		
 		//Log the event
-		logger.info("user " + player.usernameClientData.username.getUsernameId() + " joined the lobby " + "\"" + gameLobby.getGameLobbyName() + "\"" + " playing " + "\"" + game.getGameId() + "\"");
+		logger.info("user " + player.usernameClientData.username.getUsernameId() + " joined" + " playing the game" + "\"" + game.getGameId() + "\"");
 		
 		ConnectResponseMessage msg = new ConnectResponseMessage();
 		msg.team = teamPlayer.team;
@@ -232,7 +228,7 @@ public class GameInstanceService extends Thread {
 		running = false;
 		gameInstanceRepository.delete(gameInstance);
 		gameInstanceRepository.flush();
-		logger.info("Game Instance: " + gameInstance.getGameInstanceId() + " stopped! No longer playing the game: " + game.getGameId() + " with the game lobby: " + gameLobby.getGameLobbyName());
+		logger.info("Game Instance: " + gameInstance.getGameInstanceId() + " stopped! No longer playing the game: " + game.getGameId());
 	}
 	
 	@MessageMapping("/gameInstance/{gameInstanceId}/singleButtonPress/{usernameId}/{team}/{player}")
@@ -283,10 +279,6 @@ public class GameInstanceService extends Thread {
 
 	public Game getGame() {
 		return game;
-	}
-
-	public GameLobby getGameLobby() {
-		return gameLobby;
 	}
 
 	public Username getUsername() {

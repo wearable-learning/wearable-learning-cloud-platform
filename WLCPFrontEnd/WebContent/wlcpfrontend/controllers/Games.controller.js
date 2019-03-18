@@ -70,13 +70,18 @@ sap.ui.controller("wlcpfrontend.controllers.Games", {
 * @memberOf wlcpfrontend.views.Games
 */
 	onInit: function() {
-		this.getView().byId("gamesTileContainer").addEventDelegate({
-			  onAfterRendering: function(){
-			        var oBinding = this.getView().byId("gamesTileContainer").getBinding("tiles");
-			        oBinding.filter([new sap.ui.model.Filter("Username", "EQ", sap.ui.getCore().getModel("user").oData.username)]);
-			        oBinding.filter([new sap.ui.model.Filter("DataLog", "EQ", false)]);
-			  }
-			}, this);
+		
+		//TEMPORARY FIX TO STOP FLICKERING OF TILES!!
+		//THE TILE CONTAINER CONTROL HAS BEEN DEPRECIATED
+		//THIS NEED TO BE REWRITTEN
+		
+//		this.getView().byId("gamesTileContainer").addEventDelegate({
+//			  onAfterRendering: function(){
+//			        var oBinding = this.getView().byId("gamesTileContainer").getBinding("tiles");
+//			        oBinding.filter([new sap.ui.model.Filter("Username", "EQ", sap.ui.getCore().getModel("user").oData.username)]);
+//			        oBinding.filter([new sap.ui.model.Filter("DataLog", "EQ", false)]);
+//			  }
+//			}, this);
 	},
 
 /**

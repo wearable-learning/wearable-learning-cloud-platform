@@ -30,16 +30,17 @@
 							<OverflowToolbarLayoutData priority="Low" />
 						</layoutData>
 					</Button>
-<!-- 					<Button id="compileButton" text="Compile" type="Transparent" icon="sap-icon://database" enabled="false">
-						<layoutData>
-							<OverflowToolbarLayoutData priority="Low" />
-						</layoutData>
-					</Button> -->
 					<Button id="runButton" text="Run and Debug" type="Transparent" icon="sap-icon://begin" enabled="false" press="runGame">
 						<layoutData>
 							<OverflowToolbarLayoutData priority="Low" />
 						</layoutData>
 					</Button>
+					<Button id="optionsButton" text="Game Options" type="Transparent" icon="sap-icon://crm-service-manager" enabled="false" press="openGameOptions">
+						<layoutData>
+							<OverflowToolbarLayoutData priority="Low" />
+						</layoutData>
+					</Button>
+					<tnt:ToolHeaderUtilitySeparator />
 					<ToolbarSpacer width="12.5%"/>
 					<Title level = "H3" text = "Wearable Learning Cloud Platform" textAlign="Center">
 						<layoutData>

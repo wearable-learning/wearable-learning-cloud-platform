@@ -20,12 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import wlcp.gameserver.spring.repository.GameInstanceRepository;
-import wlcp.gameserver.spring.repository.GameLobbyRepository;
 import wlcp.gameserver.spring.repository.GameRepository;
 import wlcp.gameserver.spring.repository.UsernameRepository;
 import wlcp.gameserver.spring.service.GameInstanceService;
 import wlcp.model.master.GameInstance;
-import wlcp.model.master.GameLobby;
 import wlcp.model.master.Username;
 import wlcp.shared.message.ConnectRequestMessage;
 import wlcp.shared.message.DisconnectResponseMessage;
@@ -44,9 +42,6 @@ public class GameInstanceController {
 	private GameRepository gameRepository;
 	
 	@Autowired
-	private GameLobbyRepository gameLobbyRepository;
-	
-	@Autowired
 	private GameInstanceRepository gameInstanceRepository;
 	
 	@Autowired
@@ -62,16 +57,16 @@ public class GameInstanceController {
 		gameInstanceRepository.deleteAll();
 	}
 	
-	@GetMapping(value="/startGameInstance/{gameId}/{gameLobbyId}/{usernameId}")
-	public ResponseEntity<String> startGameInstance(@PathVariable String gameId, @PathVariable Integer gameLobbyId, @PathVariable String usernameId) {
-		if(gameRepository.existsById(gameId) && gameLobbyRepository.existsById(gameLobbyId) && usernameRepository.existsById(usernameId)) {
+	@GetMapping(value="/startGameInstance/{gameId}/{usernameId}")
+	public ResponseEntity<String> startGameInstance(@PathVariable String gameId, @PathVariable String usernameId) {
+		if(gameRepository.existsById(gameId) && usernameRepository.existsById(usernameId)) {
 			GameInstanceService service = context.getBean(GameInstanceService.class);
-			service.setupVariables(gameRepository.getOne(gameId), gameLobbyRepository.getOne(gameLobbyId), usernameRepository.getOne(usernameId), false);
+			service.setupVariables(gameRepository.getOne(gameId), usernameRepository.getOne(usernameId), false);
 			service.start();
 			gameInstances.add(service);
 			return ResponseEntity.status(HttpStatus.OK).body("");
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The game " + gameId + " or game lobby " + gameLobbyId + " does not exist, so an insance could not be started!");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The game " + gameId + " username " + usernameId + " does not exist, so an insance could not be started!");
 		}
 	}
 	
@@ -115,7 +110,7 @@ public class GameInstanceController {
 				GameInstanceService service = context.getBean(GameInstanceService.class);
 				Username username = new Username();
 				username.setUsernameId(usernameId);
-				service.setupVariables(gameRepository.getOne(gameId), new GameLobby(usernameId + " Debug Lobby", username), usernameRepository.getOne(usernameId), true);
+				service.setupVariables(gameRepository.getOne(gameId), usernameRepository.getOne(usernameId), true);
 				service.start();
 				gameInstances.add(service);
 				Thread.sleep(500); //This really should not be done, but were gonna go with it
@@ -124,7 +119,7 @@ public class GameInstanceController {
 				GameInstanceService service = context.getBean(GameInstanceService.class);
 				Username username = new Username();
 				username.setUsernameId(usernameId);
-				service.setupVariables(gameRepository.getOne(gameId), new GameLobby(usernameId + " Debug Lobby", username), usernameRepository.getOne(usernameId), true);
+				service.setupVariables(gameRepository.getOne(gameId), usernameRepository.getOne(usernameId), true);
 				service.start();
 				gameInstances.add(service);
 				Thread.sleep(500); //This really should not be done, but were gonna go with it

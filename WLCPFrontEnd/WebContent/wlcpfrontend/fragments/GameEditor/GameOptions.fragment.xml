@@ -1,0 +1,12 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		title="Game Options"
+		class="sapUiContentPadding"
+		placement="Bottom">
+		<Button text="Copy Game" icon="sap-icon://copy" press="copyGame"></Button>
+		<Button text="Rename Game" icon="sap-icon://bold-text" press="renameGame"></Button>
+		<Button text="Delete Game" type="Reject" icon="sap-icon://delete" press="deleteGame"></Button>
+	</Popover>
+</core:FragmentDefinition>

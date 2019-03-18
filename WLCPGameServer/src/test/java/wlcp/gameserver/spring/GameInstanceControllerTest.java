@@ -20,10 +20,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import wlcp.gameserver.spring.config.AsyncConfig;
 import wlcp.gameserver.spring.config.PersistenceJPAConfigTest;
 import wlcp.gameserver.spring.config.WebSocketConfig;
-import wlcp.gameserver.spring.repository.GameLobbyRepository;
 import wlcp.gameserver.spring.repository.GameRepository;
 import wlcp.model.master.Game;
-import wlcp.model.master.GameLobby;
 import wlcp.model.master.Username;
 	
 @RunWith(SpringRunner.class)
@@ -40,9 +38,6 @@ public class GameInstanceControllerTest {
 	
 	@Autowired
 	private GameRepository gameRepository;
-	
-	@Autowired
-	private GameLobbyRepository gameLobbyRepository;
 	
 	//@Autowired
 	//private UsernameRepository usernameRepository;
@@ -63,7 +58,6 @@ public class GameInstanceControllerTest {
 			Username username = new Username("TestUser", "", "", "", "");
 			gameRepository.saveAndFlush(new Game("TestGame", 3, 3, username, false, false));
 			username.setUsernameId("TestUser1");
-			gameLobbyRepository.saveAndFlush(new GameLobby("TestLobby", username));
 //			
 //			stompClient = new WebSocketStompClient(new SockJsClient(
 //					asList((Transport)new WebSocketTransport(new StandardWebSocketClient()))));
@@ -117,23 +111,18 @@ public class GameInstanceControllerTest {
 
 	@Test
 	public void startGameInstanceSuccess() throws Exception {
-		mockMvc.perform(get("/controllers/startGameInstance/TestGame/1/TestUser").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk());
+		mockMvc.perform(get("/controllers/startGameInstance/TestGame/TestUser").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk());
 		stopGameInstance();
 	}
 	
 	@Test
 	public void startGameInstanceGameDoesNotExist() throws Exception {
-		mockMvc.perform(get("/controllers/startGameInstance/TestGame123/1/TestUser").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isInternalServerError());
-	}
-	
-	@Test
-	public void startGameInstanceGameLobbyDoesNotExist() throws Exception {
-		mockMvc.perform(get("/controllers/startGameInstance/TestGame/2/TestUser").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isInternalServerError());
+		mockMvc.perform(get("/controllers/startGameInstance/TestGame123/TestUser").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isInternalServerError());
 	}
 	
 	@Test
 	public void startGameInstanceUsernameDoesNotExist() throws Exception {
-		mockMvc.perform(get("/controllers/startGameInstance/TestGame/1/TestUser3").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isInternalServerError());
+		mockMvc.perform(get("/controllers/startGameInstance/TestGame/TestUser3").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isInternalServerError());
 	}
 	
 //	private void startGameInstance() throws Exception {
