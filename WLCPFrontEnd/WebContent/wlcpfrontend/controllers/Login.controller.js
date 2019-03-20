@@ -130,6 +130,9 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 			return;
 		}
 		
+		//Convert the username to all lower case
+		registerData.UsernameId = registerData.UsernameId.toLowerCase();
+		
 		//If we get here we can register them
 		ODataModel.getODataModel().create("/Usernames", registerData, {success : $.proxy(this.registerSuccess, this), error : $.proxy(this.registerError, this)});
 	},
