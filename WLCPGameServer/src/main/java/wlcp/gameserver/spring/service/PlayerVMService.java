@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import jdk.nashorn.api.scripting.JSObject;
 import wlcp.gameserver.model.Player;
+import wlcp.shared.message.DisplayPhotoMessage;
 import wlcp.shared.message.DisplayTextMessage;
 import wlcp.shared.message.IMessage;
 import wlcp.shared.message.KeyboardInputMessage;
@@ -112,7 +113,7 @@ public class PlayerVMService extends Thread {
 	}
 	
 	public void unblock(IMessage message) {
-		if(message == null) { block = false; blockMessage = null; return;}
+		if(message == null || lastSentPacket == null) { block = false; blockMessage = null; return;}
 		if(message.getClass().equals(lastSentPacket.getClass())) {
 			block = false;
 			blockMessage = message;
@@ -129,11 +130,19 @@ public class PlayerVMService extends Thread {
 		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/displayText/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 	}
 	
+	public void DisplayPhoto(String url, int scale) {
+		DisplayPhotoMessage msg = new DisplayPhotoMessage();
+		msg.url = url;
+		msg.scale = scale;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/displayPhoto/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
+		
+	}
+	
 	public int SingleButtonPress(String[] buttons, int[] transitions) throws ScriptException {
 		block = true;
 		SingleButtonPressMessage msg = new SingleButtonPressMessage();
-		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/singleButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/singleButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		int state;
 		while((state = block()) == -2) {}
 		if(state != -2 && state != -1) { return state; }
@@ -149,8 +158,8 @@ public class PlayerVMService extends Thread {
 	public int SequenceButtonPress(String[] buttons, int[] transitions) {
 		block = true;
 		SequenceButtonPressMessage msg = new SequenceButtonPressMessage();
-		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/sequenceButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/sequenceButtonPressRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		int state;
 		while((state = block()) == -2) {}
 		if(state != -2 && state != -1) { return state; }
@@ -171,8 +180,8 @@ public class PlayerVMService extends Thread {
 	public int KeyboardInput(String[] keyboardInput, int[] transitions) {
 		block = true;
 		KeyboardInputMessage msg = new KeyboardInputMessage();
-		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/keyboardInputRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		lastSentPacket = msg;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/keyboardInputRequest/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
 		int state;
 		while((state = block()) == -2) {}
 		if(state != -2 && state != -1) { return state; }

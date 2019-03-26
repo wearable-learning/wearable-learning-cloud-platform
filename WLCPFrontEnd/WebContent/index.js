@@ -1,6 +1,10 @@
 var Index = {
 	
 	showMainPage : true,
+	app : null,
+	gameManagerPage : null,
+	gameEditorPage : null,
+	gamePlayerPage : null,
 	
 	main : function() {
 		if(window.location.href.includes("localhost") && !window.location.href.includes("8080")) {
@@ -51,6 +55,7 @@ var Index = {
 		
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/state/StateConfig/StateConfig");
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/state/StateConfig/StateConfigDisplayText");
+		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/state/StateConfig/StateConfigDisplayPhoto");
 		
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/transition/TransitionConfig/TransitionConfig");
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/transition/TransitionConfig/TransitionConfigSingleButtonPress");
@@ -65,7 +70,6 @@ var Index = {
 		jQuery.sap.require("wlcpfrontend/javascript/jsplumb");
 		jQuery.sap.require("wlcpfrontend/javascript/jquery-ui-touch-punch-min");
 		jQuery.sap.require("wlcpfrontend/javascript/path-data-polyfill");
-		jQuery.sap.require("wlcpfrontend/javascript/bytebuffer");
 		jQuery.sap.require("wlcpfrontend/javascript/sockjs-min");
 		jQuery.sap.require("wlcpfrontend/javascript/stomp-min");
 		
@@ -75,19 +79,40 @@ var Index = {
 	},
 	
 	loadPage : function() {
-		var app;
 		if(this.showMainPage) {
-			app = new sap.m.App({id:"app1", initialPage:"idView1"});
+			this.app = new sap.m.App({id:"app1", initialPage:"idView1"});
 			var page = sap.ui.view({id:"idView1", viewName:"wlcpfrontend.views.Login", type:sap.ui.core.mvc.ViewType.XML});
 			page.addStyleClass("myBackgroundStyle");
 		} else {
 			sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel({username : "mmicciolo"}), "user");
-			app = new sap.m.App({id:"app1", initialPage:"gameEditor"});
+			this.app = new sap.m.App({id:"app1", initialPage:"gameEditor"});
 			var page = sap.ui.view({id:"gameEditor", viewName:"wlcpfrontend.views.GameEditor", type:sap.ui.core.mvc.ViewType.XML});
 		}
-		//app = new sap.m.App({id:"app1", initialPage:"virtualDevice"});
-		//var page = sap.ui.view({id:"virtualDevice", viewName:"wlcpfrontend.views.VirtualDevice", type:sap.ui.core.mvc.ViewType.XML});
-		app.addPage(page);
-		app.placeAt("content");
+		this.app.addPage(page);
+		this.app.placeAt("content");
 	},
+	
+	switchToGameManager : function() {
+		if(this.gameManagerPage == null) {
+			this.gameManagerPage = sap.ui.view({id:"mainToolPage", viewName:"wlcpfrontend.views.MainToolpage", type:sap.ui.core.mvc.ViewType.XML});
+			this.app.addPage(this.gameManagerPage);
+		}
+		this.app.to(this.gameManagerPage);
+	},
+	
+	switchToGameEditor : function() {
+		if(this.gameEditorPage == null) {
+			this.gameEditorPage = sap.ui.view({id:"gameEditor", viewName:"wlcpfrontend.views.GameEditor", type:sap.ui.core.mvc.ViewType.XML});
+			this.app.addPage(this.gameEditorPage);
+		}
+		this.app.to(this.gameEditorPage);
+	},
+	
+	switchToGamePlayer : function() {
+		if(this.gamePlayerPage == null) {
+			this.gamePlayerPage = sap.ui.view({id:"virtualDevice", viewName:"wlcpfrontend.views.VirtualDevice", type:sap.ui.core.mvc.ViewType.XML});
+			this.app.addPage(this.gamePlayerPage);
+		}
+		this.app.to(this.gamePlayerPage);
+	}
 }
