@@ -19,7 +19,7 @@
 				<ToolbarSpacer/>
 					<Button icon="sap-icon://close-command-field" type="Transparent"/>
 					<Button icon="sap-icon://navigation-left-arrow" type="Transparent"/>
-					<Button icon="sap-icon://add" type="Accept"  press="onCreateGameLobby"/>
+					<Button icon="sap-icon://add" type="Accept"  press="onCreateGame"/>
 					<Button icon="sap-icon://edit" type="Reject"  press="onEdit"/>
 					<Button icon="sap-icon://navigation-right-arrow" type="Transparent"/>
 					<Button icon="sap-icon://open-command-field" type="Transparent"/>

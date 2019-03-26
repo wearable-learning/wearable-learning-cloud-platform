@@ -9,10 +9,7 @@ import javax.persistence.Persistence;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 
-import wlcp.testdata.entities.GameLobbyEntity;
-import wlcp.testdata.entities.GameLobbyUsernameEntity;
 import wlcp.testdata.entities.UsernameEntity;
-import wlcp.testdata.entities.UsernameGameLobbyEntity;
 
 public class Test {
 
@@ -35,9 +32,6 @@ public class Test {
 		EntityManager manager = factory.createEntityManager();
 		
 		DataLoaderFactory.LoadData(new UsernameEntity("C:\\Users\\Matt\\git\\wearable-learning-cloud-platform\\WLCPTestData\\TestData\\Username.csv"), manager);
-		DataLoaderFactory.LoadData(new GameLobbyEntity("C:\\Users\\Matt\\git\\wearable-learning-cloud-platform\\WLCPTestData\\TestData\\GameLobby.csv"), manager);
-		DataLoaderFactory.LoadData(new UsernameGameLobbyEntity("C:\\Users\\Matt\\git\\wearable-learning-cloud-platform\\WLCPTestData\\TestData\\UsernameGameLobby.csv"), manager);
-		DataLoaderFactory.LoadData(new GameLobbyUsernameEntity("C:\\Users\\Matt\\git\\wearable-learning-cloud-platform\\WLCPTestData\\TestData\\GameLobbyUsernames.csv"), manager);
 		
 		manager.close();
 		factory.close();

@@ -1,7 +1,16 @@
 var ServerConfig = {
 	
 	getServerAddress : function() {
-		return "130.215.45.83:3333";
-		//return "localhost:3333";
+		var serverURL = "";
+		if(window.location.host.includes("www.")) {
+			serverURL = window.location.host.replace("www.", "");
+		} else {
+			serverURL = window.location.host;
+		}
+		if(serverURL.includes(":")) {
+			return serverURL.replace(":8080", ":3333");
+		} else {
+			return serverURL + ":3333";
+		}
 	}
 }

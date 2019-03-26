@@ -32,31 +32,27 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		username: ""
 	},
 	
+	newUserModelData : {
+		username: ""
+	},
+	
 	userModel : new sap.ui.model.json.JSONModel(),
+	newUserModel : new sap.ui.model.json.JSONModel(),
 	
 	onLoginPress: function() {
 		this.userModelData.username = this.modelData.username.toLowerCase();
 		this.userModel.setData(this.userModelData);
 		switch(this.modelData.mode) {
 		case "Game Manager": 
-			var app = sap.ui.getCore().byId("app1");
-			var page = sap.ui.view({id:"mainToolPage", viewName:"wlcpfrontend.views.MainToolpage", type:sap.ui.core.mvc.ViewType.XML});
-			app.addPage(page);
-			app.to(page.getId());
+			Index.switchToGameManager();
 			break;
 		case "Game Editor":
-			var app = sap.ui.getCore().byId("app1");
-			var page = sap.ui.view({id:"gameEditor", viewName:"wlcpfrontend.views.GameEditor", type:sap.ui.core.mvc.ViewType.XML});
-			app.addPage(page);
-			app.to(page.getId());
+			Index.switchToGameEditor();
 			break;
 		case "Player":
-			var app = sap.ui.getCore().byId("app1");
-			var page = sap.ui.view({id:"virtualDevice", viewName:"wlcpfrontend.views.VirtualDevice", type:sap.ui.core.mvc.ViewType.XML});
-			page.getController().debugMode = false;
-			page.getController().initVirtualDevice();
-			app.addPage(page);
-			app.to(page.getId());
+			Index.switchToGamePlayer();
+			Index.gamePlayerPage.getController().debugMode = false;
+			Index.gamePlayerPage.getController().initVirtualDevice();
 			break;
 		default:
 			break;
@@ -65,18 +61,30 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 	
 	validateLogin : function() {
 		var oDataModel = ODataModel.getODataModel();
-		oDataModel.read("/Usernames", {success : $.proxy(this.oDataSuccess, this), error : $.proxy(this.oDataError, this)});
+		this.newUserModelData.username = this.modelData.username.toLowerCase();
+		//this.newUserModelData.password = this.modelData.password;
+		this.newUserModel.setData(this.newUserModelData);
+		
+		$.ajax({headers : { 'Accept': 'application/json', 'Content-Type': 'application/json'},
+			url: ODataModel.getWebAppURL() + "/Rest/Controllers/userLogin",
+			type: 'POST',
+			dataType: 'json',
+			data: this.newUserModel.getJSON(),
+			success : $.proxy(this.oDataSuccess, this),
+			error : $.proxy(this.oDataError, this)
+		});
 	},
 	
 	oDataSuccess : function(oData) {
 		var usernameFound = false;
-		for(var i = 0; i < oData.results.length; i++) {
-			if(this.modelData.username.toLowerCase() == oData.results[i].UsernameId) {
-				this.onLoginPress();
-				usernameFound = true;
-				break;
-			}
+		
+		if(oData!=null && oData == true) {
+			
+			this.onLoginPress();
+			usernameFound = true;
+			
 		}
+		
 		if(!usernameFound) {
 			sap.m.MessageBox.error("Login Credentials Incorrect!");
 		}
@@ -121,6 +129,9 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 			sap.m.MessageBox.error("That username already exists!");
 			return;
 		}
+		
+		//Convert the username to all lower case
+		registerData.UsernameId = registerData.UsernameId.toLowerCase();
 		
 		//If we get here we can register them
 		ODataModel.getODataModel().create("/Usernames", registerData, {success : $.proxy(this.registerSuccess, this), error : $.proxy(this.registerError, this)});

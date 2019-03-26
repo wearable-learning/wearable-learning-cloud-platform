@@ -3,11 +3,6 @@
 		"title": "Dashboard",
 		"icon" : "sap-icon://bbyd-dashboard",
 		"key" : "parent,wlcpfrontend.views.Dashboard,dashboard,page"
-	},  {
-		"title" : "Game Lobbies",
-		"icon" : "sap-icon://group",
-		"key" : "parent,wlcpfrontend.views.GameLobbies,gameLobbies,page",
-		"expanded" : false
 	}, {
 		"title" : "Games",
 		"icon" : "sap-icon://iphone",

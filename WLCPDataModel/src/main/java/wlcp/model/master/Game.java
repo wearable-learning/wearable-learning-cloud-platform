@@ -43,7 +43,7 @@ public class Game implements Serializable {
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "USERNAME", nullable = false)
-	@JsonIgnoreProperties(value= {"password", "firstName", "lastName", "emailAddress", "gameLobbies"})
+	@JsonIgnoreProperties(value= {"password", "firstName", "lastName", "emailAddress"})
 	private Username username;
 	
 	@Column(name = "VISIBILITY")
