@@ -9,7 +9,7 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 	
 	//side bar in configure window list of available states
 	getNavigationListItem() {
-		return {
+		return {	
 			//text : "Display Text",
 			text : "Display Photo",
 			icon : "sap-icon://picture"	

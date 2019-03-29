@@ -14,23 +14,29 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 	debugMode : false,
 	debugGameInstanceId : null,
 	restartDebug : null,
+	recievedDisplayText : false,
+	recievedDisplayPhoto : false,
 	
 	socket : null,
 	stompClient : null,
 	
 	redButtonPressed : function() {
+		this.resetStateDisplayTypes();
 		this.stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/singleButtonPress/" + this.username + "/" + this.team + "/" + this.player, {}, "{\"buttonPress\" : 1}");
 	},
 
 	greenButtonPressed : function() {
+		this.resetStateDisplayTypes();
 		this.stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/singleButtonPress/" + this.username + "/" + this.team + "/" + this.player, {}, "{\"buttonPress\" : 2}");
 	},
 
 	blueButtonPressed : function() {
+		this.resetStateDisplayTypes();
 		this.stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/singleButtonPress/" + this.username + "/" + this.team + "/" + this.player, {}, "{\"buttonPress\" : 3}");
 	},
 
 	blackButtonPressed : function() {
+		this.resetStateDisplayTypes();
 		this.stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/singleButtonPress/" + this.username + "/" + this.team + "/" + this.player, {}, "{\"buttonPress\" : 4}");
 	},
 	
@@ -48,6 +54,7 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 				sequence = sequence.concat("4");
 			}
 		}
+		this.resetStateDisplayTypes();
 		this.stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/sequenceButtonPress/" + this.username + "/" + this.team + "/" + this.player, {}, JSON.stringify({sequenceButtonPress : sequence}));
 		var children = $("#virtualDevice--colorListSortable-listUl").children();
 		for(var i = 0; i < children.length; i++) {
@@ -72,6 +79,7 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 	
 	submitKeyboardInput : function() {
 		var keyboardInput = sap.ui.getCore().byId("virtualDevice--keyboardInputField").getValue();
+		this.resetStateDisplayTypes();
 		this.stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/keyboardInput/" + this.username + "/" + this.team + "/" + this.player, {}, JSON.stringify({keyboardInput : keyboardInput}));
 		sap.ui.getCore().byId("virtualDevice--keyboardInputField").setValue("");
 	},
@@ -109,12 +117,40 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 		var that = this;
 		this.stompClient.subscribe("/subscription/gameInstance/" + gameInstanceId + "/displayText/" + this.username + "/" + team + "/" + player, function(response) {
 			var parsedJson = JSON.parse(response.body);
-			var displayTextBox = sap.ui.getCore().byId("virtualDevice--displayText");
-			displayTextBox.setValue(parsedJson.displayText);
+			that.recievedDisplayText = true
+			//photo already initialized
+			if(that.recievedDisplayText && that.recievedDisplayPhoto){
+				var displayTextBox = sap.ui.getCore().byId("virtualDevice--displayTextLabel");
+				displayTextBox.setText(parsedJson.displayText); //this becomes id of displayTextPhoto Label
+			}
+			else {
+				var displayTextBox = sap.ui.getCore().byId("virtualDevice--displayTextArea");
+				displayTextBox.setValue(parsedJson.displayText); //this becomes id in displayText TextArea
+				that.switchToStateType("DisplayText");
+			}
+			//that.switchToStateType("DisplayPhoto");
+			//displayTextBox.setValue(parsedJson.displayText);
 		});
 		this.stompClient.subscribe("/subscription/gameInstance/" + gameInstanceId + "/displayPhoto/" + this.username + "/" + team + "/" + player, function(response) {
 			var parsedJson = JSON.parse(response.body);
 			console.log(parsedJson);
+			that.recievedDisplayPhotoText = true;
+			//load text if exists
+			if(that.recievedDisplayText) {
+				var displayTextLabel = sap.ui.getCore().byId("virtualDevice--displayTextLabel");
+				displayTextLabel.setText(sap.ui.getCore().byId("virtualDevice--displayTextArea").getValue());
+			}
+			
+			var displayPhoto = sap.ui.getCore().byId("virtualDevice--displayPhotoImage");
+			//load image
+			var img = new Image();
+			img.addEventListener("load", $.proxy(function() {
+				displayPhoto.setHeight(img.naturalHeight * (parsedJson.scale/100) + "px");
+				displayPhoto.setWidth(img.naturalWidth * (parsedJson.scale/100) + "px");
+				displayPhoto.setSrc(parsedJson.url);
+			}, this));
+			img.src = parsedJson.url;
+			that.switchToStateType("DisplayTextPhoto");
 		});
 		this.stompClient.subscribe("/subscription/gameInstance/" + gameInstanceId + "/singleButtonPressRequest/" + this.username + "/" + team + "/" + player, function(response) {
 			that.switchToTransitionType("SingleButtonPress");
@@ -145,6 +181,18 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 			}});
 		} else {
 			window.close();
+		}
+	},
+	
+	switchToStateType : function(type) {
+		var navContainer = sap.ui.getCore().byId("virtualDevice--outputContainer");
+		switch(type) {
+		case "DisplayText":
+			navContainer.to(sap.ui.getCore().byId("virtualDevice--displayTextPage"));
+			break;
+		case "DisplayTextPhoto":
+			navContainer.to(sap.ui.getCore().byId("virtualDevice--displayTextPhotoPage"));
+			break;
 		}
 	},
 	
@@ -211,6 +259,12 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 			this.debugGameInstanceId = debugGameInstanceId;
 			sap.ui.getCore().setModel(this.model);
 		}
+	},
+	
+	resetStateDisplayTypes : function() {
+		this.recievedDisplayText = false;
+		this.recievedDisplayPhoto = false;
+		
 	},
 
 /**

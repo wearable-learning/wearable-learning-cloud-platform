@@ -68,3 +68,7 @@
 .sequenceButton2Black {
 	background: black;
 }
+
+.sapMLabel.displayTextPhotoColor {
+	color: white;
+}
