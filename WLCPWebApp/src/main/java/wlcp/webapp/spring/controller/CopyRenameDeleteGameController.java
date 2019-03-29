@@ -89,7 +89,7 @@ public class CopyRenameDeleteGameController {
 				newGame.getStates().add(newStartState);
 				entityManager.persist(newStartState);
 			} else {
-				OutputState newOutputState = new OutputState(state.getStateId().replace(gameId, newGameId), newGame, state.getStateType(), state.getPositionX(), state.getPositionY(), new ArrayList<Connection>(), new ArrayList<Connection>(), ((OutputState) state).getDescription(), ((OutputState) state).getDisplayText());
+				OutputState newOutputState = new OutputState(state.getStateId().replace(gameId, newGameId), newGame, state.getStateType(), state.getPositionX(), state.getPositionY(), new ArrayList<Connection>(), new ArrayList<Connection>(), ((OutputState) state).getDescription(), ((OutputState) state).getDisplayText(),  ((OutputState) state).getPictureOutputs());
 				newGame.getStates().add(newOutputState);
 				entityManager.persist(newOutputState);
 			}

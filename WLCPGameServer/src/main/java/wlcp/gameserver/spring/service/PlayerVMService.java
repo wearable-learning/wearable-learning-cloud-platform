@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import jdk.nashorn.api.scripting.JSObject;
 import wlcp.gameserver.model.Player;
+import wlcp.shared.message.DisplayPhotoMessage;
 import wlcp.shared.message.DisplayTextMessage;
 import wlcp.shared.message.IMessage;
 import wlcp.shared.message.KeyboardInputMessage;
@@ -127,6 +128,14 @@ public class PlayerVMService extends Thread {
 		DisplayTextMessage msg = new DisplayTextMessage();
 		msg.displayText = text;
 		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/displayText/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
+	}
+	
+	public void DisplayPhoto(String url, int scale) {
+		DisplayPhotoMessage msg = new DisplayPhotoMessage();
+		msg.url = url;
+		msg.scale = scale;
+		messageTemplate.convertAndSend("/subscription/gameInstance/" + gameInstanceService.getGameInstance().getGameInstanceId() + "/displayPhoto/" + player.usernameClientData.username.getUsernameId() + "/" + player.teamPlayer.team + "/" + player.teamPlayer.player,  msg);
+		
 	}
 	
 	public int SingleButtonPress(String[] buttons, int[] transitions) throws ScriptException {

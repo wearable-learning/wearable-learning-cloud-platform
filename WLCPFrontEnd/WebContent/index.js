@@ -55,6 +55,7 @@ var Index = {
 		
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/state/StateConfig/StateConfig");
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/state/StateConfig/StateConfigDisplayText");
+		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/state/StateConfig/StateConfigDisplayPhoto");
 		
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/transition/TransitionConfig/TransitionConfig");
 		jQuery.sap.require("wlcpfrontend/javascript/GameEditor/transition/TransitionConfig/TransitionConfigSingleButtonPress");
