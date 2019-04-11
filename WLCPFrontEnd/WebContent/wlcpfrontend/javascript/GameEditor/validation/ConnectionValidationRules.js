@@ -123,7 +123,7 @@ var ConnectionValidationSuccess = class ConnectionValidationSuccess extends Vali
 				var neighbors = GameEditor.getJsPlumbInstance().getConnections({source : neighborConnections[i].sourceId});
 				for(var n = 0; n < neighbors.length; n++) {
 					if(neighbors[n].targetId != validationData.connectionTo) {
-						if(this.isLoopBack(validationData.connectionTo, neighbors[n].targetId) && !this.getConnectionIsLoopBack(neighbors[n].id)) {
+						if(this.isLoopBack(validationData.connectionTo, neighbors[n].targetId) && !this.getConnectionIsLoopBack(neighbors[n].id) && !this.getStateLoopBacks(neighbors[n].targetId)) {
 							neighborloopBack = true;
 							break;
 						}
@@ -161,6 +161,15 @@ var ConnectionValidationSuccess = class ConnectionValidationSuccess extends Vali
 				return GameEditor.getEditorController().connectionList[i].isLoopBack;
 			}
 		}
+	}
+	
+	getStateLoopBacks(stateId) {
+		for(var i = 0; i < this.getState(stateId).outputConnections.length; i++) {
+			if(this.getState(stateId).outputConnections[i].isLoopBack) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	getState(stateId) {
