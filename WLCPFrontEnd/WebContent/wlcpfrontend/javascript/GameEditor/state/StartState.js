@@ -22,6 +22,9 @@ var StartState = class StartState extends State {
 		
 		//Setup the end points
 		this.jsPlumbInstance.addEndpoint(this.stateDiv.id, { id : this.htmlId + "output", anchor:"Bottom", paintStyle:{ fill: "#5E696E" } }, this.outputEndPoint);
+		
+		//Setup double click
+		$("#"+this.stateDiv.id).dblclick($.proxy(this.explainWindow, this));
 	}
 	
 	static load(loadData) {
@@ -62,5 +65,10 @@ var StartState = class StartState extends State {
 	
 	getActiveScopes() {
 		return ["Game Wide"];
+	}
+	
+	explainWindow(){
+		sap.m.MessageBox.information("This is where your players will enter the game. Draw an arrow to the first state you want them to see!");
+		return;
 	}
 }

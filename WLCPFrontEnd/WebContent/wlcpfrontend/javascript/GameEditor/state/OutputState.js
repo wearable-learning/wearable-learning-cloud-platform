@@ -63,13 +63,7 @@ var OutputState = class OutputState extends State {
 	doubleClick() {
 		
 		//Check to see if we have a connection to us
-		var hasConnection = false;
-		for(var i = 0; i < GameEditor.getEditorController().connectionList.length; i++) {
-			if(GameEditor.getEditorController().connectionList[i].connectionTo.htmlId == this.htmlId) {
-				hasConnection = true;
-				break;
-			}
-		}
+		var hasConnection = this.inputConnections.length > 0;
 		if(!hasConnection) {
 			sap.m.MessageBox.error("Drop a connection of the state before using it!");
 			return;
@@ -386,4 +380,5 @@ var OutputState = class OutputState extends State {
 		}
 		return activeScopes;
 	}
+	
 }
