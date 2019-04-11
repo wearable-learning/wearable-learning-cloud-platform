@@ -13,7 +13,7 @@ node {
 	  }
 	  stage('Unit Testing') {
 	  	 if(params.unit) {
-	      sh "'${mvnHome}/bin/mvn' test"
+	      sh "'${mvnHome}/bin/mvn' test -Dwdm.chromeDriverVersion=73.0.3683.68"
 	     }
 	  }
 	  stage('Integration Testing') {
