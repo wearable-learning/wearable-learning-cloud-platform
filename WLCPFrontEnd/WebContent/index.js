@@ -20,6 +20,7 @@ var Index = {
 		this.loadJQuery();
 		this.loadExternalResources();
 		this.loadPage();
+		this.loadi18nModel();
 	},
 	
 	loadJQuery : function() {
@@ -90,6 +91,11 @@ var Index = {
 		}
 		this.app.addPage(page);
 		this.app.placeAt("content");
+	},
+	
+	loadi18nModel : function () {
+		 var i18nModel = new sap.ui.model.resource.ResourceModel({bundleUrl : "wlcpfrontend/i18n/messages.properties"});
+		 sap.ui.getCore().setModel(i18nModel, "i18n");
 	},
 	
 	switchToGameManager : function() {
