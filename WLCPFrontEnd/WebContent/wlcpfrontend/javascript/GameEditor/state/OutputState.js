@@ -68,6 +68,29 @@ var OutputState = class OutputState extends State {
 			return;
 		}
 		
+		//Check to see if previous states are empty
+		var oneFilled = false;
+		for(var i = 0; i < this.inputConnections.length; i++){
+			//var input = State.getStateById(this.inputConnections[i].htmlId);
+			var input = this.inputConnections[i].connectionFrom;
+			if(typeof input.scopeMask !== 'undefined'){
+				if(input.getActiveScopes().length > 0){
+					oneFilled = true;
+					break;
+				}
+			}
+		}
+		if(typeof input.scopeMask !== 'undefined' && !oneFilled){
+			sap.m.MessageBox.error("All of the input states are empty. Fill in at least one the input state to edit this one!");
+			return;
+		}
+		
+		//check if neighbor states have filled all scopes
+		if(this.scopeMask == 0){
+			sap.m.MessageBox.error("All players and teams have been assigned in neighbor states. Do you really need this state? Who do you want to see this state? Check the neighbor states to see what those players are seeing.");
+			return;
+		}
+		
 		//Create an instance of the dialog
 		this.dialog = sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.States.OutputStateConfig", this);
 		
