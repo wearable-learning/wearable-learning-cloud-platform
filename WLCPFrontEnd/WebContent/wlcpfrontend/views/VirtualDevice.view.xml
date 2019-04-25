@@ -40,10 +40,21 @@
 			<l:Splitter id="mainSplitter" orientation="Vertical" height="100%" width="100%">
 				<NavContainer id="outputContainer">
 					<layoutData><l:SplitterLayoutData size="50%" resizable="false"/></layoutData>
-					<Page showHeader="false">
+ 					<Page id="displayTextPage" showHeader="false">
 						<FlexBox height="100%" alignItems="Center" justifyContent="Center">
 							<items>
-								<TextArea id="displayText" editable="false" rows="8" cols="100" />
+								<TextArea id="displayTextArea" editable="false" rows="8" cols="100" />
+							</items>
+						</FlexBox>
+					</Page>
+					<Page id="displayTextPhotoPage" showHeader="false">
+						<FlexBox height="100%" alignItems="Center" justifyContent="Center">
+							<items>
+								<VBox alignItems="Center" justiftContent="Center">
+									<!-- <TextArea id="displayText" editable="false" rows="4" cols="100" /> -->
+									<Label id="displayTextLabel" textAlign="Center" wrapping="true" class="sapUiMediumMargin displayTextPhotoColor"></Label>
+									<Image id="displayPhotoImage"></Image>
+								</VBox>
 							</items>
 						</FlexBox>
 					</Page>

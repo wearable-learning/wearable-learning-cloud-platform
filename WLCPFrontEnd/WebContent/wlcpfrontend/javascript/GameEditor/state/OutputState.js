@@ -53,6 +53,7 @@ var OutputState = class OutputState extends State {
 	
 	setupStateConfigs() {
 		this.stateConfigs.push(new StateConfigDisplayText(this));
+		this.stateConfigs.push(new StateConfigDisplayPhoto(this));
 	}
 	
 	setupValidationRules() {

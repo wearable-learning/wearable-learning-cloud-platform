@@ -295,3 +295,11 @@ html.sap-desktop .sapMSlt.sapMTSSlt, html.sap-tablet .sapMSlt.sapMTSSlt {
 .sequenceDeleteButton {
 	height : 100px;
 }
+
+.switchButton {
+	height : 20px;
+	width : 150px;
+	margin: 10px;
+    padding: 5px;
+}
+

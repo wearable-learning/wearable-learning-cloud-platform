@@ -12,6 +12,7 @@ import wlcp.model.master.state.StartState;
 import wlcp.model.master.state.State;
 import wlcp.model.master.transition.Transition;
 import wlcp.transpiler.helper.TranspilerHelpers;
+import wlcp.transpiler.state.DisplayPhotoStateType;
 import wlcp.transpiler.state.DisplayTextStateType;
 import wlcp.transpiler.state.IStateType;
 import wlcp.transpiler.state.StateType;
@@ -61,6 +62,7 @@ public class GenerateStateMachineFunctionsStep implements ITranspilerStep {
 	
 	private void SetupTypes() {
 		stateTypes.add(new DisplayTextStateType());
+		stateTypes.add(new DisplayPhotoStateType());
 		transitionTypes.add(new SingleButtonPressTransitionType());
 		transitionTypes.add(new SequenceButtonPressTransitionType());
 		transitionTypes.add(new KeyboardInputTransitionType());

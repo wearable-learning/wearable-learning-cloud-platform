@@ -53,7 +53,9 @@
 							<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px" />
 						</layoutData>
 					</ToolbarSpacer>
+					
 					<f:Avatar displaySize="XS" initials="MM" press="handleAvatarPress"/>
+					<Button icon = "sap-icon://switch-views" type="Transparent" press="switchViewPress"></Button>
 					<Button icon = "sap-icon://user-settings" type="Transparent">
 					</Button>
 					<Button icon = "sap-icon://log" type="Transparent" press="onGotoLogin">
