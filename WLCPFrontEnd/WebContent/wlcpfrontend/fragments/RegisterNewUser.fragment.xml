@@ -4,22 +4,22 @@
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	
-	<Dialog title = "Register New User">
+	<Dialog title = "{i18n>register.title}">
 		<buttons>
-			<Button text="Register" type="Accept" press="confirmRegisterNewUser"/>
-			<Button text="Cancel" type="Reject" press="cancelRegisterNewUser"/>
+			<Button text="{i18n>register.register}" type="Accept" press="confirmRegisterNewUser"/>
+			<Button text="{i18n>button.cancel}" type="Reject" press="cancelRegisterNewUser"/>
 		</buttons>
 		<FlexBox height="250px" alignItems="Center" justifyContent="Center">
 			<items>
 				<VBox>
-					<Text text="Please enter the details below"/>
-					<Input width="12em" id="username" placeholder="Username"
+					<Text text="{i18n>register.instructions}"/>
+					<Input width="12em" id="username" placeholder="{i18n>register.username}"
 						value="{/newUser/UsernameId}"></Input>
-					<Input width="12em" id="password" placeholder="Password"
+					<Input width="12em" id="password" placeholder="{i18n>register.password}"
 						value="{/newUser/Password}" type="Password"></Input>
-					<Input width="12em" id="firstName" placeholder="Firstname"
+					<Input width="12em" id="firstName" placeholder="{i18n>register.firstname}"
 						value="{/newUser/FirstName}"></Input>
-					<Input width="12em" id="lastName" placeholder="Lastname"
+					<Input width="12em" id="lastName" placeholder="{i18n>register.lastname}"
 						value="{/newUser/LastName}"></Input>
 				</VBox>
 			</items>

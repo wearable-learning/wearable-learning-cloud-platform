@@ -6,7 +6,7 @@
 	
 	<FlexBox alignItems="Start" justifyContent="Center">
 		<items>
-			<Text text="Enter text to be displayed on the client screen..."/>
+			<Text text="{i18n>gameEditor.outputState.displayText.help}"/>
 		</items>
 	</FlexBox>
 	<FlexBox alignItems="Start" justifyContent="Center">

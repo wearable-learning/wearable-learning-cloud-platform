@@ -10,17 +10,17 @@
 	xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:mvc="sap.ui.core.mvc">
 	
-	<Dialog id="outputStateDialog" title="Configure..." contentWidth="50%" contentHeight="50%">
+	<Dialog id="outputStateDialog" title="{i18n>gameEditor.inputTransition.title}" contentWidth="50%" contentHeight="50%">
 		<buttons>
-			<Button text="Accept" type="Accept" press="acceptDialog"/>
-			<Button text="Cancel" type="Reject" press="closeDialog"/>
+			<Button text="{i18n>button.accept}" type="Accept" press="acceptDialog"/>
+			<Button text="{i18n>button.cancel}" type="Reject" press="closeDialog"/>
 		</buttons>
 		<IconTabBar id="inputTransitionDialogIconTabBar" items="{/iconTabs}" showOverflowSelectList="false" applyContentPadding="false" expandable="false">
 			<items>
 				<IconTabFilter icon="{icon}" text="{scope}" key="{scope}">
 					<content>
 						<l:Splitter>
-							<List class="navList" items="{path : 'navigationListItems', templateShareable:false}" mode="SingleSelectLeft" headerText="Select the Transition Type" selectionChange="transitionTypeSelected"> 
+							<List class="navList" items="{path : 'navigationListItems', templateShareable:false}" mode="SingleSelectLeft" headerText="{i18n>gameEditor.inputTransition.selectTransitionType}" selectionChange="transitionTypeSelected"> 
 								<layoutData><l:SplitterLayoutData size="250px" resizable="false"/></layoutData>
 								<StandardListItem title="{title}" icon="{icon}" selected="{selected}" visible="{visible}"/>
 							</List>

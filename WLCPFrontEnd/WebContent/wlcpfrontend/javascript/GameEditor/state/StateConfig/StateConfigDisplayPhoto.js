@@ -1,5 +1,3 @@
-//var StateConfigDisplayText = class StateConfigDisplayText extends StateConfig {
-//var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig {
 var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig {
 	
 	constructor(state) {
@@ -10,18 +8,15 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 	//side bar in configure window list of available states
 	getNavigationListItem() {
 		return {	
-			//text : "Display Text",
-			text : "Display Photo",
+			text : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.outputState.displayPhoto"),
 			icon : "sap-icon://picture"	
-			//icon : "sap-icon://discussion-2"
 		}
 	}
 	
 	//return title of page
 	getNavigationContainerPage() {
 		return {
-			title : "Display Photo",
-			//title : "Display Text",
+			title : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.outputState.displayPhoto"),
 			url : "",
 			scale : 50,
 			scalingString : "50%",
@@ -30,15 +25,12 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 		}
 	}
 	
-	//update scalingString
 	updateScalingString(oEvent) {
-		//console.log(oEvent.getParameters().value);
-		//var scalingString = oEvent.getParameters().value.toString() + "%"
 		var iconTabs = this.state.modelJSON.iconTabs;
 		for(var i = 0; i < iconTabs.length; i++) {
 			if(iconTabs[i].scope == sap.ui.getCore().byId("outputStateDialogIconTabBar").getSelectedKey()) {
 				for(var n = 0; n < iconTabs[i].navigationContainerPages.length; n++) {
-					if(iconTabs[i].navigationContainerPages[n].title == "Display Photo") {
+					if(iconTabs[i].navigationContainerPages[n].title == this.getNavigationContainerPage().title) {
 						this.displayPhotoPage = iconTabs[i].navigationContainerPages[n];
 						var img = new Image();
 						img.addEventListener("load", $.proxy(function() {
@@ -47,7 +39,6 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 							this.state.model.setData(this.state.modelJSON);
 						}, this));
 						img.src = iconTabs[i].navigationContainerPages[n].url;
-						//iconTabs[i].navigationContainerPages[n].scalingString = iconTabs[i].navigationContainerPages[n].scaling.toString() + "%";
 					}
 				}
 			}
@@ -57,7 +48,6 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 	
 	//put XML code here
 	getStateConfigFragment() {
-		//return sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.States.OutputStateDisplayPhotoConfig", this);
 		return sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.States.OutputStateDisplayPhotoConfig", this);
 	}
 	
@@ -68,7 +58,7 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 		var iconTabs = this.state.modelJSON.iconTabs;
 		for(var i = 0; i < iconTabs.length; i++) {
 			for(var n = 0; n < iconTabs[i].navigationContainerPages.length; n++) {
-				if(iconTabs[i].navigationContainerPages[n].title == "Display Photo") {
+				if(iconTabs[i].navigationContainerPages[n].title == this.getNavigationContainerPage().title) {
 					if(iconTabs[i].navigationContainerPages[n].url != "") {
 						activeScopes.push(iconTabs[i].scope);
 					}
@@ -85,7 +75,7 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 			for(var i = 0; i < iconTabs.length; i++) {
 				if(key == iconTabs[i].scope) {
 					for(var n = 0; n < iconTabs[i].navigationContainerPages.length; n++) {
-						if(iconTabs[i].navigationContainerPages[n].title == "Display Photo") {
+						if(iconTabs[i].navigationContainerPages[n].title == this.getNavigationContainerPage().title) {
 							iconTabs[i].navigationContainerPages[n].url = loadData.pictureOutputs[key].url;
 							iconTabs[i].navigationContainerPages[n].scale = loadData.pictureOutputs[key].scale;
 							this.displayPhotoPage = iconTabs[i].navigationContainerPages[n];
@@ -110,16 +100,13 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 		var iconTabs = this.state.modelJSON.iconTabs;
 		for(var i = 0; i < iconTabs.length; i++) {
 			for(var n = 0; n < iconTabs[i].navigationContainerPages.length; n++) {
-				if(iconTabs[i].navigationContainerPages[n].title == "Display Photo") {
+				if(iconTabs[i].navigationContainerPages[n].title == this.getNavigationContainerPage().title) {
 					if(iconTabs[i].navigationContainerPages[n].url != "") {
 						outputStateData[iconTabs[i].scope] = {
 							    url : iconTabs[i].navigationContainerPages[n].url,
 							    scale : iconTabs[i].navigationContainerPages[n].scale
 							}
 					}
-//					if(iconTabs[i].navigationContainerPages[n].scale != null){
-//						outputStateData[iconTabs[i].scope].scale = iconTabs[i].navigationContainerPages[n].scale;
-//					}
 				}
 			}
 		}
