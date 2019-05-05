@@ -74,8 +74,8 @@
 						<html:div class="centerTransitionText"><html:div>Input</html:div><html:div>Transition</html:div></html:div>
 					</html:div>
 				</ScrollContainer>
-				<ScrollContainer id="pad" height="100%" width="100%" horizontal="true" vertical="true" focusable="true">
-				</ScrollContainer>
+				<Page id="pad" showHeader="false">
+				</Page>
 				</l:Splitter>
 			</l:Splitter>
 		</content>
