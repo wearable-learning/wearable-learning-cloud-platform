@@ -55,11 +55,10 @@
 					</ToolbarSpacer>
 					
 					<f:Avatar displaySize="XS" initials="MM" press="handleAvatarPress"/>
-					<Button icon = "sap-icon://switch-views" type="Transparent" press="switchViewPress"></Button>
-					<Button icon = "sap-icon://user-settings" type="Transparent">
-					</Button>
-					<Button icon = "sap-icon://log" type="Transparent" press="onGotoLogin">
-					</Button>
+					<Button icon = "sap-icon://sys-help" type="Transparent" press="quickStartHelp"/>
+					<Button icon = "sap-icon://switch-views" type="Transparent" press="switchViewPress"/>
+					<Button icon = "sap-icon://user-settings" type="Transparent"/>
+					<Button icon = "sap-icon://log" type="Transparent" press="onGotoLogin"/>
 				</tnt:ToolHeader>
 				<l:Splitter id="mainSplitter">
 				<ScrollContainer id="toolbox" height="100%" width="240px" horizontal="false" vertical="true" focusable="true" class="scroll">
