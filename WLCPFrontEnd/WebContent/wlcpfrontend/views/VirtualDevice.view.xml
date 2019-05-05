@@ -28,6 +28,7 @@
 			</Page>
 			<Page id="virtualDevicePage" showHeader="false">
 			<tnt:ToolHeader>
+				<Text id="userTeamPlayer"/>
 				<ToolbarSpacer />
 				<Text text="Virtual Device" textAlign="Center" wrapping="false">
 					<layoutData>
@@ -43,7 +44,7 @@
  					<Page id="displayTextPage" showHeader="false">
 						<FlexBox height="100%" alignItems="Center" justifyContent="Center">
 							<items>
-								<TextArea id="displayTextArea" editable="false" rows="8" cols="100" />
+								<TextArea id="displayTextArea" editable="false" rows="8" cols="100" class="displayTextBackground"/>
 							</items>
 						</FlexBox>
 					</Page>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Dialog title="Quick Start Help" contentHeight="50%" contentWidth="50%">
+		<buttons>
+			<Button text="Close" type="Reject" press="closeQuickStartHelp"/>
+		</buttons>
+		<Wizard finishButtonText="Complete" complete="closeQuickStartHelp">
+			<WizardStep title="My Step 1">
+				<Text text="My Step 1"/>
+			</WizardStep>
+			<WizardStep title="My Step 2">
+				<Text text="My Step 2"/>
+			</WizardStep>
+		</Wizard>
+	</Dialog>
+</core:FragmentDefinition>

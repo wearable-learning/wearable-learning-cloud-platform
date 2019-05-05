@@ -661,6 +661,16 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		
 	},
 	
+	quickStartHelp : function() {
+		this.quickStartHelpDialog = sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.QuickStartHelp", this);
+		this.quickStartHelpDialog.open();
+	},
+	
+	closeQuickStartHelp : function() {
+		this.quickStartHelpDialog.close();
+		this.quickStartHelpDialog.destroy();
+	},
+	
 /**
 * Called when a controller is instantiated and its View controls (if available) are already created.
 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
@@ -682,8 +692,38 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 				  if(this.loadFromEditor != null) {
 					  setTimeout($.proxy(function() { this.loadFromManager(this.loadFromEditor) }, this), 1000);
 				  }
+				  
+				  //Setup scrolling via mouse
+				  this.setupScrolling();
 			  }
-			}, this);
+			}, this);	
+	},
+	
+	setupScrolling : function() {
+		var that = this;
+		this.oldX = 0;
+		this.oldY = 0;
+		document.getElementById("gameEditor--mainSplitter-content-1").onmousemove = function (e) {
+			that.clicked && that.updateScrollPos(e);
+		}
+		
+		document.getElementById("gameEditor--mainSplitter-content-1").onmousedown = function (e) {
+			that.clicked = true;
+			that.oldX = e.pageX;
+			that.oldY = e.pageY;
+		}
+		
+		document.getElementById("gameEditor--mainSplitter-content-1").onmouseup = function (e) {
+			that.clicked = false;
+	        $('html').css('cursor', 'auto');
+		}
+	},
+	
+	updateScrollPos : function(e) {
+	    $('html').css('cursor', 'row-resize');
+	    document.getElementById("gameEditor--mainSplitter-content-1").scrollBy(this.oldX - e.pageX, this.oldY - e.pageY);
+	    this.oldX = e.pageX;
+	    this.oldY = e.pageY;    
 	},
 
 /**
