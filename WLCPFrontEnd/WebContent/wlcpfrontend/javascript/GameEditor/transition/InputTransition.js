@@ -236,6 +236,10 @@ var InputTransition = class InputTransition extends Transition {
 	}
 	
 	doubleClick() {
+		if(this.scopeMask == 0){
+			sap.m.MessageBox.error("Fill in the state above to edit this transition.");
+			return;
+		}
 		
 		//Create an instance of the dialog
 		this.dialog = sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.Transitions.InputTransition", this);
