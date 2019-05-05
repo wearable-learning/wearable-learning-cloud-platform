@@ -69,6 +69,10 @@
 	background: black;
 }
 
+.sapMInputBase.displayTextBackground {
+	background : white;
+}
+
 .sapMLabel.displayTextPhotoColor {
 	color: white;
 }
