@@ -20,7 +20,7 @@
 		</HBox>
 		<IconTabBar id="outputStateDialogIconTabBar" items="{/iconTabs}" showOverflowSelectList="false" applyContentPadding="false" expandable="false">
 			<items>
-				<IconTabFilter icon="{icon}" text="{scope}" key="{scope}">
+				<IconTabFilter icon="{icon}" text="{scopeText}" key="{scope}">
 					<content>
 						<l:Splitter>					
 							<tnt:NavigationList class="navList" items="{path : 'navigationListItems', templateShareable:false}">

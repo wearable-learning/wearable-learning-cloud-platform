@@ -17,7 +17,7 @@
 		</buttons>
 		<IconTabBar id="inputTransitionDialogIconTabBar" items="{/iconTabs}" showOverflowSelectList="false" applyContentPadding="false" expandable="false">
 			<items>
-				<IconTabFilter icon="{icon}" text="{scope}" key="{scope}">
+				<IconTabFilter icon="{icon}" text="{scopeText}" key="{scope}">
 					<content>
 						<l:Splitter>
 							<List class="navList" items="{path : 'navigationListItems', templateShareable:false}" mode="SingleSelectLeft" headerText="{i18n>gameEditor.inputTransition.selectTransitionType}" selectionChange="transitionTypeSelected"> 
