@@ -8,6 +8,10 @@
 	background : #3f5161;
 }
 
+.scroll-overflow-hidden {
+	overflow : unset !important;
+}
+
 .sapMTabStrip .sapMTSTabsContainer .sapMTSTabs .sapMTabStripItem .sapMTSItemCloseBtnCnt {
 	display : inherit;
 }
