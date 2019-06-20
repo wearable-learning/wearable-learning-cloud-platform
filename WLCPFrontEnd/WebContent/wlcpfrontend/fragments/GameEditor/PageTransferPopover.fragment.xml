@@ -6,14 +6,14 @@
 	xmlns:tnt="sap.tnt"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout">
-	<Popover showHeader = "true" title="Switch Screen" class="sapMOTAPopover sapTntToolHeaderPopover" placement="Bottom">
+	<Popover showHeader = "true" title="{i18n>gameEditor.switchScreen.title}" class="sapMOTAPopover sapTntToolHeaderPopover" placement="Bottom">
 		<l:HorizontalLayout class="sapUiSmallMargin">
-			<Button class="switchButton" type="Accept" text="Game Manager" press="switchToManager">
+			<Button class="switchButton" type="Accept" text="{i18n>gameEditor.switchScreen.gameManager}" press="switchToManager">
 					
 			</Button>
 		</l:HorizontalLayout>
 		<l:HorizontalLayout class="sapUiSmallMargin">
-			<Button class="switchButton" type="Accept" text="Game Player" press="switchToPlayer">
+			<Button class="switchButton" type="Accept" text="{i18n>gameEditor.switchScreen.gamePlayer}" press="switchToPlayer">
 					
 			</Button>
 		</l:HorizontalLayout>

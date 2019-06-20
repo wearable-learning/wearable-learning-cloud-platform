@@ -10,19 +10,19 @@
 	xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:mvc="sap.ui.core.mvc">
 	
-	<Dialog id="keyboardInputDialog" title="Configure..." contentWidth="50%" contentHeight="50%">
+	<Dialog id="keyboardInputDialog" title="{i18n>gameEditor.inputTransition.keyboardInput.configure}" contentWidth="50%" contentHeight="50%">
 		<buttons>
-			<Button text="Submit" type="Accept" press="closeKeyboardInput"/>
-			<Button text="Close" type="Reject" press="closeDialog"/>
+			<Button text="{i18n>button.accept}" type="Accept" press="closeKeyboardInput"/>
+			<Button text="{i18n>button.cancel}" type="Reject" press="closeDialog"/>
 		</buttons>
 		<FlexBox alignItems="Start" justifyContent="Center">
 			<items>
-				<Text text="Enter text you want a user to input in order to transition! (case insensitive)"/>
+				<Text text="{i18n>gameEditor.inputTransition.keyboardInput.help}"/>
 			</items>
 		</FlexBox>
 		<FlexBox alignItems="Start" justifyContent="Center">
 			<items>
-				<Input id="keyboardInput" placeholder="Enter text here!"></Input>
+				<Input id="keyboardInput" placeholder="{i18n>gameEditor.inputTransition.keyboardInput.placeHolder}"></Input>
 			</items>
 		</FlexBox>
 	</Dialog>

@@ -151,6 +151,7 @@ var OutputState = class OutputState extends State {
 		return {
 			icon : "",
 			scope : "",
+			scopeText : "",
 			navigationListItems : tempNavigationListItems,
 			navigationContainerPages : tempNavigationContainerPages,
 		}
@@ -165,6 +166,7 @@ var OutputState = class OutputState extends State {
 		var data = this.createData();
 		data.icon = "sap-icon://globe";
 		data.scope = "Game Wide";
+		data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.gameWide");
 		for(var i = 0; i < data.navigationContainerPages.length; i++) {
 			data.navigationContainerPages[i].scope = data.scope;
 		}
@@ -175,6 +177,7 @@ var OutputState = class OutputState extends State {
 			data = this.createData();
 			data.icon = "sap-icon://group";
 			data.scope = "Team " + (i + 1);
+			data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1);
 			baseData.push(data);
 		}
 		
@@ -184,6 +187,7 @@ var OutputState = class OutputState extends State {
 				data = this.createData();
 				data.icon = "sap-icon://employee";
 				data.scope = "Team " + (i + 1) + " Player " + (n + 1);
+				data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1) + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.player") + " " + (n + 1);
 				baseData.push(data);
 			}
 		}
@@ -217,6 +221,7 @@ var OutputState = class OutputState extends State {
 				var data = this.createData();
 				data.icon = "sap-icon://globe";
 				data.scope = "Game Wide";
+				data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.gameWide");
 				newTabs.push(data);
 			}
 		}
@@ -237,6 +242,7 @@ var OutputState = class OutputState extends State {
 					var data = this.createData();
 					data.icon = "sap-icon://group";
 					data.scope = "Team " + (i + 1);
+					data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1);
 					newTabs.push(data);
 				}
 			}	
@@ -258,6 +264,7 @@ var OutputState = class OutputState extends State {
 						var data = this.createData();
 						data.icon = "sap-icon://employee";
 						data.scope = "Team " + (i + 1) + " Player " + (n + 1);
+						data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1) + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.player") + " " + (n + 1);
 						newTabs.push(data);
 					}
 				}

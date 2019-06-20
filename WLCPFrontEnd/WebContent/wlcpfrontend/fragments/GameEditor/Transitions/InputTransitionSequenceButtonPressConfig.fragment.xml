@@ -6,19 +6,19 @@
 
 	<FlexBox alignItems="Start" justifyContent="Center">
 		<items>
-			<Button text="Add Sequence" press="addSequence"></Button>
+			<Button text="{i18n>gameEditor.inputTransition.sequenceButtonPress.addSequence}" press="addSequence"></Button>
 		</items>
 	</FlexBox>
 	<FlexBox alignItems="Start" justifyContent="Center">
 		<items>
 			<List showSeparators="None"
 				items="{path:'sequencePress', templateShareable:false}"
-				noDataText="No Button Sequence">
+				noDataText="{i18n>gameEditor.inputTransition.sequenceButtonPress.noSequence}">
 				<CustomListItem xmlns="sap.m">
 					<content>
 						<List showSeparators="None"
 							items="{path:'buttons', templateShareable:false}"
-							noDataText="Empty Sequence">
+							noDataText="{i18n>gameEditor.inputTransition.sequenceButtonPress.emptySequence}">
 							<StandardListItem />
 						</List>
 						<Button icon="sap-icon://delete" press="deleteSequence"

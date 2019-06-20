@@ -10,10 +10,10 @@
 	xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:mvc="sap.ui.core.mvc">
 	
-	<Dialog id="sequencePressDialog" title="Configure..." contentWidth="50%" contentHeight="50%">
+	<Dialog id="sequencePressDialog" title="{i18n>gameEditor.inputTransition.sequenceButtonPress.configure}" contentWidth="50%" contentHeight="50%">
 		<buttons>
-			<Button text="Submit" type="Accept" press="acceptSequence"/>
-			<Button text="Close" type="Reject" press="closeDialog"/>
+			<Button text="{i18n>button.accept}" type="Accept" press="acceptSequence"/>
+			<Button text="{i18n>button.cancel}" type="Reject" press="closeDialog"/>
 		</buttons>
 		<FlexBox alignItems="Start" justifyContent="Center">
 			<items>
