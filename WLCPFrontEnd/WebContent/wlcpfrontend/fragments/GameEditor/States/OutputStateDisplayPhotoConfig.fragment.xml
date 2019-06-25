@@ -7,7 +7,7 @@
 	xmlns:mvc="sap.ui.core.mvc">
 	<FlexBox alignItems="Start" justifyContent="Center">
 		<items>
-			<Text text="Enter Photo URL to be displayed"/>
+			<Text text="{i18n>gameEditor.outputState.displayPhoto.help}"/>
 		</items>
 	</FlexBox>
 	<FlexBox alignItems="Start" justifyContent="Center">
@@ -17,7 +17,7 @@
 	</FlexBox>
 	<FlexBox alignItems="Start" justifyContent="Center">
 		<items>
-			<Text text="Photo Scaling"/>
+			<Text text="{i18n>gameEditor.outputState.displayPhoto.help2}"/>
 		</items>
 	</FlexBox>
 	<Slider change="updateScalingString" liveChange="updateScalingString" value="{scale}" enableTickmarks="true" min="0" max="100" step="10" width="70%" showAdvancedTooltip="true" showHandleTooltip="false"/>

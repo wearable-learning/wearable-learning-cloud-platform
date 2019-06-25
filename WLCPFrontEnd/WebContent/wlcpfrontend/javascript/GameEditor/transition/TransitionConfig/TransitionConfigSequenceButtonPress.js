@@ -7,7 +7,7 @@ var TransitionConfigSequenceButtonPress = class TransitionConfigSequenceButtonPr
 	
 	getNavigationListItem() {
 		return {
-			title : "Sequence Button Press",
+			title : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress"),
 			icon : "sap-icon://multiselect-none",
 			selected : false,
 			visible : true
@@ -16,7 +16,7 @@ var TransitionConfigSequenceButtonPress = class TransitionConfigSequenceButtonPr
 	
 	getNavigationContainerPage() {
 		return {
-			title : "Sequence Button Press",
+			title : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress"),
 			sequencePress : []
 		}
 	}
@@ -30,7 +30,7 @@ var TransitionConfigSequenceButtonPress = class TransitionConfigSequenceButtonPr
 		var iconTabs = this.transition.modelJSON.iconTabs;
 		for(var i = 0; i < iconTabs.length; i++) {
 			for(var n = 0; n < iconTabs[i].navigationContainerPages.length; n++) {
-				if(iconTabs[i].navigationContainerPages[n].title == "Sequence Button Press") {
+				if(iconTabs[i].navigationContainerPages[n].title == sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress")) {
 					if(iconTabs[i].navigationContainerPages[n].sequencePress.length > 0) {
 						activeScopes.push(iconTabs[i].scope);
 					}
@@ -52,7 +52,7 @@ var TransitionConfigSequenceButtonPress = class TransitionConfigSequenceButtonPr
 			for(var i = 0; i < iconTabs.length; i++) {
 				if(key == iconTabs[i].scope) {
 					for(var n = 0; n < iconTabs[i].navigationContainerPages.length; n++) {
-						if(iconTabs[i].navigationContainerPages[n].title == "Sequence Button Press") {
+						if(iconTabs[i].navigationContainerPages[n].title == sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress")) {
 							for(var k = 0; k < loadData.sequenceButtonPresses[key].sequences.length; k++) {
 								var buttons = [];
 								for(var j = 0; j < loadData.sequenceButtonPresses[key].sequences[k].length; j++) {
@@ -72,7 +72,7 @@ var TransitionConfigSequenceButtonPress = class TransitionConfigSequenceButtonPr
 		var iconTabs = this.transition.modelJSON.iconTabs;
 		for(var i = 0; i < iconTabs.length; i++) {
 			for(var n = 0; n < iconTabs[i].navigationContainerPages.length; n++) {
-				if(iconTabs[i].navigationContainerPages[n].title == "Sequence Button Press") {
+				if(iconTabs[i].navigationContainerPages[n].title == sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress")) {
 					var sequences = [];
 					for(var k = 0; k < iconTabs[i].navigationContainerPages[n].sequencePress.length; k++) {
 						var buttons = "";

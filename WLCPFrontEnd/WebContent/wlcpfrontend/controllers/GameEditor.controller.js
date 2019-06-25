@@ -56,7 +56,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	initStartState : function() {
 		
 		//Create a new start state
-		var startState = new StartState("startStateTopColor", "startStateBottomColor", "Start State" , this.gameModel.GameId + "_start", this.jsPlumbInstance);
+		var startState = new StartState("startStateTopColor", "startStateBottomColor", sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.startState") , this.gameModel.GameId + "_start", this.jsPlumbInstance);
 		
 		//Set the position
 		startState.setPositionX(((document.getElementById("gameEditor--pad").offsetWidth / 2) - (150 / 2))); startState.setPositionY(100);
@@ -69,7 +69,14 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		
 		//Save it
 		this.saveGame();
-	},	
+	},
+	
+	initToolboxText : function() {
+		$("#gameEditor--toolboxTitle")[0].innerHTML = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.toolboxTitle");
+		$("#gameEditor--toolboxOutputState")[0].children[0].children[0].innerHTML = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.outputState");
+		$("#gameEditor--toolboxTransition")[0].children[0].children[0].innerHTML = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition").split(" ")[0];
+		$("#gameEditor--toolboxTransition")[0].children[0].children[1].innerHTML = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition").split(" ")[1];
+	},
 
 	initToolbox : function() {
 		$("#gameEditor--toolboxOutputState").draggable({ revert: false, helper: "clone", start : this.dragStart, stop : $.proxy(this.stateDragStop, this)});
@@ -100,7 +107,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		switch(ui.helper[0].childNodes[1].className) {
 			case "toolboxOutputStateTopColor":
 				if(State.absoluteToRelativeX(ui.position.left, 150) + GameEditor.getScrollLeftOffset() < 0 || State.absoluteToRelativeY(ui.position.top) + GameEditor.getScrollTopOffset() < 0) {sap.m.MessageBox.error("A state could not be placed there!"); return;}
-				var outputState = new OutputState("toolboxOutputStateTopColor", "toolboxOutputStateBottomColor", "Output State" , this.createStateId(), this.jsPlumbInstance);
+				var outputState = new OutputState("toolboxOutputStateTopColor", "toolboxOutputStateBottomColor", sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.outputState") , this.createStateId(), this.jsPlumbInstance);
 				outputState.setPositionX(State.absoluteToRelativeX(ui.position.left, 150) + GameEditor.getScrollLeftOffset()); outputState.setPositionY(State.absoluteToRelativeY(ui.position.top) + GameEditor.getScrollTopOffset());
 				outputState.draw();
 				this.stateList.push(outputState);
@@ -695,6 +702,9 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 				  
 				  //Setup scrolling via mouse
 				  this.setupScrolling();
+				  
+				  //Load the toolbox text
+				  this.initToolboxText();
 			  }
 			}, this);	
 	},

@@ -29,7 +29,7 @@ var StartState = class StartState extends State {
 	
 	static load(loadData) {
 		//Create a new start state
-		var startState = new StartState("startStateTopColor", "startStateBottomColor", "Start State" , loadData.stateId, GameEditor.getEditorController().jsPlumbInstance);
+		var startState = new StartState("startStateTopColor", "startStateBottomColor", sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.startState") , loadData.stateId, GameEditor.getEditorController().jsPlumbInstance);
 		
 		//Set the position
 		startState.setPositionX(loadData.positionX); startState.setPositionY(loadData.positionY);

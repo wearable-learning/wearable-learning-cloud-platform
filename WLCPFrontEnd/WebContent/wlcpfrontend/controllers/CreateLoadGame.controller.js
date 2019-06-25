@@ -1,25 +1,5 @@
 sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	
-	/**
-	 * This function is called when the Create Game Button is pressed
-	 * on the Create Load Game Dialog that shows when the editor is
-	 * first loaded.
-	 */
-	createGamePressed : function() {
-		sap.ui.getCore().byId("createLoadGame").close();
-		sap.ui.getCore().byId("createLoadGame").destroy();
-		sap.ui.xmlfragment("wlcpfrontend.fragments.GameEditor.CreateGame", sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame")).open();
-	},
-	
-	/**
-	 * This function is called when the Load Game Button is pressed
-	 * on the Create Load Game Dialog that shows when the editor is
-	 * first loaded.
-	 */
-	loadGame : function() {
-		
-	},
-	
 	getMaxPlayer : function (max, teamCount) {
 		  return Math.floor(max / teamCount);
 		},

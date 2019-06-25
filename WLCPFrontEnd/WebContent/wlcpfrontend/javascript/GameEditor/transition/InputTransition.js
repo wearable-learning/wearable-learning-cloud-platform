@@ -26,7 +26,7 @@ var InputTransition = class InputTransition extends Transition {
 		this.jsPlumbConnection = GameEditor.getJsPlumbInstance().getConnections({ source : this.connection.connectionFrom.htmlId, target : this.connection.connectionTo.htmlId})[0];
 		
 		//Add the overlay
-		this.jsPlumbConnection.addOverlay([ "Label", {id : this.overlayId, label: "<div id=" + "\"" + this.overlayId + "_delete\"" + "class=\"close2-thik\"></div><div class=\"centerTransitionText\"/><div>Input</div><div>Transition</div></div>", cssClass : this.cssClass + " jtk-drag-select"}]);
+		this.jsPlumbConnection.addOverlay([ "Label", {id : this.overlayId, label: "<div id=" + "\"" + this.overlayId + "_delete\"" + "class=\"close2-thik\"></div><div class=\"centerTransitionText\"/><div>" + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition").split(" ")[0] + "</div><div>" + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition").split(" ")[1] + "</div></div>", cssClass : this.cssClass + " jtk-drag-select"}]);
 		
 		//Store the id
 		for(var key in this.jsPlumbConnection.getOverlays()) {
@@ -97,6 +97,7 @@ var InputTransition = class InputTransition extends Transition {
 				var data = this.createData();
 				data.icon = "sap-icon://globe";
 				data.scope = "Game Wide";
+				data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.gameWide");
 				newTabs.push(data);
 			}
 		}
@@ -117,6 +118,7 @@ var InputTransition = class InputTransition extends Transition {
 					var data = this.createData();
 					data.icon = "sap-icon://group";
 					data.scope = "Team " + (i + 1);
+					data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1);
 					newTabs.push(data);
 				}
 			}	
@@ -138,6 +140,7 @@ var InputTransition = class InputTransition extends Transition {
 						var data = this.createData();
 						data.icon = "sap-icon://employee";
 						data.scope = "Team " + (i + 1) + " Player " + (n + 1);
+						data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1) + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.player") + " " + (n + 1);
 						newTabs.push(data);
 					}
 				}
@@ -310,7 +313,8 @@ var InputTransition = class InputTransition extends Transition {
 		return {
 			icon : "",
 			scope : "",
-			activeTransition : "Single Button Press",
+			scopeText : "",
+			activeTransition : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.singleButtonPress"),
 			navigationListItems : tempNavigationListItems,
 			navigationContainerPages : tempNavigationContainerPages
 		}
@@ -325,6 +329,7 @@ var InputTransition = class InputTransition extends Transition {
 		var data = this.createData();
 		data.icon = "sap-icon://globe";
 		data.scope = "Game Wide";
+		data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.gameWide");
 		baseData.push(data);
 		
 		//Add the teams
@@ -332,6 +337,7 @@ var InputTransition = class InputTransition extends Transition {
 			data = this.createData();
 			data.icon = "sap-icon://group";
 			data.scope = "Team " + (i + 1);
+			data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1);
 			baseData.push(data);
 		}
 		
@@ -341,6 +347,7 @@ var InputTransition = class InputTransition extends Transition {
 				data = this.createData();
 				data.icon = "sap-icon://employee";
 				data.scope = "Team " + (i + 1) + " Player " + (n + 1);
+				data.scopeText = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team") + " " + (i + 1) + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.player") + " " + (n + 1);
 				baseData.push(data);
 			}
 		}
