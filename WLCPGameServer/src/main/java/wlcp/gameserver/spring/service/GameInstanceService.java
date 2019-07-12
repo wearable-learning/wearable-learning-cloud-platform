@@ -108,6 +108,8 @@ public class GameInstanceService extends Thread {
 					//User already exists in the game, maybe they are trying to reconnect?
 					player.playerVM.reconnect();
 					ConnectResponseMessage msg = new ConnectResponseMessage();
+					msg.team = player.teamPlayer.team;
+					msg.player = player.teamPlayer.player;
 					msg.code = Code.RECONNECT;
 					return msg;
 				}

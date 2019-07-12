@@ -121,7 +121,15 @@ public class PlayerVMService extends Thread {
 	}
 	
 	public void reconnect() {
-		reconnect = true;
+		if(block) {
+			reconnect = true;
+		} else {
+			try {
+				scriptEngine.eval("FSMGame.oldState = FSMGame.oldState - 1");
+			} catch (ScriptException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void DisplayText(String text) {
