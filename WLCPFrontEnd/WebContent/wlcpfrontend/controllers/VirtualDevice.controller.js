@@ -90,6 +90,8 @@ sap.ui.controller("wlcpfrontend.controllers.VirtualDevice", {
 		    var that = this;
 		    this.stompClient.connect({}, function (frame) {
 		    	that.connectToGameInstance(that.gameInstanceId, team, player);
+		    }, function(disconnectError) {
+		    	that.setupSocketConnection(team, player);
 		    });
 	},
 	
