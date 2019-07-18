@@ -178,38 +178,27 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	},
 	
 	connectionDetached : function(oEvent) {
-		var i = 0;
-		if(oEvent.suspendedElementId == oEvent.targetId || typeof oEvent.suspendedElementId === "undefined") {
-			for(var i = 0; i < this.connectionList.length; i++) {
-			if(this.connectionList[i].connectionId == oEvent.id) {
-				if(this.connectionList[i].connectionTo.getActiveScopes().length > 0) {
-					var that = this;
-					sap.m.MessageBox.confirm("By clicking OK, the validation engine will revalidate causing possible data loss in states and transitions below!", {title:"Confirm Connection Removal?", onClose : function (oEvent) {
-						if(oEvent == sap.m.MessageBox.Action.OK) {
-							that.connectionList[i].detach();
-							DataLogger.logGameEditor();
-						} else {
-							var ep1 = null;
-							if(that.connectionList[i].connectionFrom.htmlId.includes("_start")) {
-								ep1 = GameEditor.getEditorController().jsPlumbInstance.selectEndpoints({element : that.connectionList[i].connectionFrom.htmlId}).get(0);
-							} else {
-								ep1 = GameEditor.getEditorController().jsPlumbInstance.selectEndpoints({element : that.connectionList[i].connectionFrom.htmlId}).get(1);
-							}
-							var ep2 = GameEditor.getEditorController().jsPlumbInstance.selectEndpoints({element : that.connectionList[i].connectionTo.htmlId}).get(0);
-							var connection = GameEditor.getEditorController().jsPlumbInstance.connect({ source: ep1 , target: ep2});
-							connection.id = that.connectionList[i].connectionId;
+		var that = this;
+		sap.m.MessageBox.confirm("By clicking OK, the validation engine will revalidate causing possible data loss in states and transitions below!", {title:"Confirm Connection Removal?", onClose : function (oEvent2) {
+			if(oEvent2 == sap.m.MessageBox.Action.OK) {
+				var i = 0;
+				if(oEvent.suspendedElementId == oEvent.targetId || typeof oEvent.suspendedElementId === "undefined") {
+					for(var i = 0; i < that.connectionList.length; i++) {
+					if(that.connectionList[i].connectionId == oEvent.id) {
+						var connectionFrom = that.connectionList[i].connectionFrom.htmlId;
+						var connectionTo = that.connectionList[i].connectionTo.htmlId;
+						that.connectionList[i].detach();
+						GameEditor.getJsPlumbInstance().deleteConnection(GameEditor.getJsPlumbInstance().getConnections({source : connectionFrom, target : connectionTo})[0], {fireEvent : false, force : true});
+						DataLogger.logGameEditor();
+						break;
 						}
-					}});
+					}
 				} else {
-					this.connectionList[i].detach();
-					DataLogger.logGameEditor();
-				}
-				break;
+					sap.m.MessageBox.error("Cannot move connections, drag a new one.");
 				}
 			}
-		} else {
-			sap.m.MessageBox.error("Cannot move connections, drag a new one.");
-		}
+		}});
+		return false;
 	},
 
 	createStateId : function() {
