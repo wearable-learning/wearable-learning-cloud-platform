@@ -84,6 +84,17 @@ var GameEditorTestingHelpers = {
 			}
 		}
 		return null;
+	},
+	
+	removeConnection : function(connection) {
+		var connections = GameEditor.getJsPlumbInstance().getConnections({source : connection.connectionFrom.htmlId, target : connection.connectionTo.htmlId});
+		GameEditor.getJsPlumbInstance().deleteConnection(connections[0], {fireEvent : false, force : true});
+		for(var i = 0; i < GameEditor.getEditorController().connectionList.length; i++) {
+			if(GameEditor.getEditorController().connectionList[i].connectionId == connection.connectionId) {
+				GameEditor.getEditorController().connectionList[i].detach();
+				break;
+			}
+		}
 	}
 
 }
