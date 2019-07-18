@@ -182,8 +182,28 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		if(oEvent.suspendedElementId == oEvent.targetId || typeof oEvent.suspendedElementId === "undefined") {
 			for(var i = 0; i < this.connectionList.length; i++) {
 			if(this.connectionList[i].connectionId == oEvent.id) {
-				this.connectionList[i].detach();
-				DataLogger.logGameEditor();
+				if(this.connectionList[i].connectionTo.getActiveScopes().length > 0) {
+					var that = this;
+					sap.m.MessageBox.confirm("By clicking OK, the validation engine will revalidate causing possible data loss in states and transitions below!", {title:"Confirm Connection Removal?", onClose : function (oEvent) {
+						if(oEvent == sap.m.MessageBox.Action.OK) {
+							that.connectionList[i].detach();
+							DataLogger.logGameEditor();
+						} else {
+							var ep1 = null;
+							if(that.connectionList[i].connectionFrom.htmlId.includes("_start")) {
+								ep1 = GameEditor.getEditorController().jsPlumbInstance.selectEndpoints({element : that.connectionList[i].connectionFrom.htmlId}).get(0);
+							} else {
+								ep1 = GameEditor.getEditorController().jsPlumbInstance.selectEndpoints({element : that.connectionList[i].connectionFrom.htmlId}).get(1);
+							}
+							var ep2 = GameEditor.getEditorController().jsPlumbInstance.selectEndpoints({element : that.connectionList[i].connectionTo.htmlId}).get(0);
+							var connection = GameEditor.getEditorController().jsPlumbInstance.connect({ source: ep1 , target: ep2});
+							connection.id = that.connectionList[i].connectionId;
+						}
+					}});
+				} else {
+					this.connectionList[i].detach();
+					DataLogger.logGameEditor();
+				}
 				break;
 				}
 			}

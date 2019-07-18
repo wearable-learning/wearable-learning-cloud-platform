@@ -9,6 +9,7 @@ var Connection = class Connection {
 		this.connectionTo = connectionTo;
 		this.transition = null;
 		this.isLoopBack = false;
+		this.isNeighborLoopBack = false;
 		this.validationCounter = -1;
 		this.validationRules = [];
 		this.setupValidationRules();
@@ -83,6 +84,9 @@ var Connection = class Connection {
 			//Remove ourself from the connection list
 			GameEditor.getEditorController().connectionList.splice(GameEditor.getEditorController().connectionList.indexOf(this), 1);
 		}
+		
+		//Revalidates the states that were below this connection
+		this.connectionTo.revalidate();
 	}
 	
 	save() {
