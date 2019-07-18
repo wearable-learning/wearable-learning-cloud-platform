@@ -69,19 +69,16 @@ var OutputState = class OutputState extends State {
 			return;
 		}
 		
-		//Check to see if previous states are empty
+		//Check to make sure there is atleast one non empty previous state
 		var oneFilled = false;
-		for(var i = 0; i < this.inputConnections.length; i++){
-			//var input = State.getStateById(this.inputConnections[i].htmlId);
-			var input = this.inputConnections[i].connectionFrom;
-			if(typeof input.scopeMask !== 'undefined'){
-				if(input.getActiveScopes().length > 0){
-					oneFilled = true;
-					break;
-				}
+		for(var i = 0; i < this.inputConnections.length; i++) {
+			if(this.inputConnections[i].connectionFrom.htmlId.includes("_start") || this.inputConnections[i].connectionFrom.getActiveScopes().length > 0) {
+				oneFilled = true;
+				break;
 			}
 		}
-		if(typeof input.scopeMask !== 'undefined' && !oneFilled){
+		
+		if(!oneFilled) {
 			sap.m.MessageBox.error("All of the input states are empty. Fill in at least one the input state to edit this one!");
 			return;
 		}
