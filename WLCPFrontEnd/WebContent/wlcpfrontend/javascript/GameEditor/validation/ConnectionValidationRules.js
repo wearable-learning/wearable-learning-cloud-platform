@@ -116,29 +116,40 @@ var ConnectionValidationSuccess = class ConnectionValidationSuccess extends Vali
 		var state2 = this.getState(validationData.connectionFrom);
 		
 		var loopBack = this.isLoopBack(state2.htmlId, state.htmlId);
-		var neighborloopBack = false;
-		var neighborConnections = GameEditor.getJsPlumbInstance().getConnections({target : validationData.connectionTo});
-		for(var i = 0; i < neighborConnections.length; i++) {
-			if(neighborConnections[i].id != validationData.connectionId) {
-				var neighbors = GameEditor.getJsPlumbInstance().getConnections({source : neighborConnections[i].sourceId});
-				for(var n = 0; n < neighbors.length; n++) {
-					if(neighbors[n].targetId != validationData.connectionTo) {
-						if(this.isLoopBack(validationData.connectionTo, neighbors[n].targetId) && !this.getConnectionIsLoopBack(neighbors[n].id) && !this.getStateLoopBacks(neighbors[n].targetId)) {
-							neighborloopBack = true;
-							break;
-						}
-					}
-				}
-			}
-		}
+//		var neighborloopBack = false;
+//		var neighborConnections = GameEditor.getJsPlumbInstance().getConnections({target : validationData.connectionTo});
+//		for(var i = 0; i < neighborConnections.length; i++) {
+//			if(neighborConnections[i].id != validationData.connectionId) {
+//				var neighbors = GameEditor.getJsPlumbInstance().getConnections({source : neighborConnections[i].sourceId});
+//				for(var n = 0; n < neighbors.length; n++) {
+//					if(neighbors[n].targetId != validationData.connectionTo) {
+//						if(this.isLoopBack(validationData.connectionTo, neighbors[n].targetId) && !this.getConnectionIsLoopBack(neighbors[n].id) && !this.getStateLoopBacks(neighbors[n].targetId)) {
+//							neighborloopBack = true;
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		}
+		
+		var neighborloopBack = this.isNeighborLoopBack(validationData);
 		
 		if(loopBack && !neighborloopBack) {
 			validationData.isLoopBack = true;
 		} else if(neighborloopBack) {
-			sap.m.MessageBox.error("You cannot loop back to a neighbor.");
-			this.removeConnection(validationData);
-			return;
+//			sap.m.MessageBox.error("You cannot loop back to a neighbor.");
+//			this.removeConnection(validationData);
+//			return;
+			validationData.isNeighborLoopBack = true;
 		}
+		
+		//See of any connection have become neighbor loopbacks due to the new connection
+		for(var i = 0; i < this.getState(validationData.connectionTo).inputConnections.length; i++) {
+			if(this.isNeighborLoopBack(new Connection(this.getState(validationData.connectionTo).inputConnections[i].connectionId, this.getState(validationData.connectionTo).inputConnections[i].connectionFrom.htmlId, this.getState(validationData.connectionTo).inputConnections[i].connectionTo.htmlId))) {
+				this.getState(validationData.connectionTo).inputConnections[i].isNeighborLoopBack = true;
+			}
+		}
+		
 		
 		//Store the connection in the states
 		state.inputConnections.push(validationData);
@@ -196,5 +207,24 @@ var ConnectionValidationSuccess = class ConnectionValidationSuccess extends Vali
 			}
 		}
 		return false;
+	}
+	
+	isNeighborLoopBack(validationData) {
+		var neighborloopBack = false;
+		var neighborConnections = GameEditor.getJsPlumbInstance().getConnections({target : validationData.connectionTo});
+		for(var i = 0; i < neighborConnections.length; i++) {
+			if(neighborConnections[i].id != validationData.connectionId) {
+				var neighbors = GameEditor.getJsPlumbInstance().getConnections({source : neighborConnections[i].sourceId});
+				for(var n = 0; n < neighbors.length; n++) {
+					if(neighbors[n].targetId != validationData.connectionTo) {
+						if(this.isLoopBack(validationData.connectionTo, neighbors[n].targetId) && !this.getConnectionIsLoopBack(neighbors[n].id) && !this.getStateLoopBacks(neighbors[n].targetId)) {
+							neighborloopBack = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+		return neighborloopBack;
 	}
 }
