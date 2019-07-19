@@ -100,10 +100,10 @@ var State = class State {
 		if(oAction == sap.m.MessageBox.Action.OK) {
 			
 			//Remove all connections
-			for(var i = 0; i < this.inputConnections.length; i++) {
+			for(var i = this.inputConnections.length - 1; i >= 0; i--) {
 				this.inputConnections[i].detach();
 			}
-			for(var i = 0; i < this.outputConnections.length; i++) {
+			for(var i = this.outputConnections.length - 1; i >= 0; i--) {
 				this.outputConnections[i].detach();
 			}
 			
