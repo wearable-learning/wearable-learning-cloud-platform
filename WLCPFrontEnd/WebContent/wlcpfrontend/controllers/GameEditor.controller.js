@@ -183,7 +183,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		if(oEvent.suspendedElementId == oEvent.targetId || typeof oEvent.suspendedElementId === "undefined") {
 			for(var i = 0; i < this.connectionList.length; i++) {
 				if(this.connectionList[i].connectionId == oEvent.id) {
-					if(this.connectionList[i].connectionTo.getActiveScopes().length > 0) {
+					if(this.connectionList[i].connectionFrom.getActiveScopes().length > 0) {
 						sap.m.MessageBox.confirm("By clicking OK, the validation engine will revalidate causing possible data loss in states and transitions below!", {title:"Confirm Connection Removal?", onClose : function (oEvent2) {
 							if(oEvent2 == sap.m.MessageBox.Action.OK) {
 								var connectionFrom = that.connectionList[i].connectionFrom.htmlId;
