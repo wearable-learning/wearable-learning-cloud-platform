@@ -100,7 +100,12 @@ var State = class State {
 		if(oAction == sap.m.MessageBox.Action.OK) {
 			
 			//Remove all connections
-			this.jsPlumbInstance.deleteConnectionsForElement(this.htmlId);
+			for(var i = 0; i < this.inputConnections.length; i++) {
+				this.inputConnections[i].detach();
+			}
+			for(var i = 0; i < this.outputConnections.length; i++) {
+				this.outputConnections[i].detach();
+			}
 			
 			//Remove the state element
 			this.jsPlumbInstance.remove(this.htmlId);
