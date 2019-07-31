@@ -43,11 +43,17 @@ var Connection = class Connection {
 		}
 	}
 	
+	validateConnectionAttached() {
+		this.validationRules[0].validate(this);
+	}
+	
+	validateConnectionDetached() {
+		this.validationRules[1].validate(this, new ConnectionValidationSuccess());
+	}
+	
 	setupValidationRules() {
 		this.validationRules.push(new ConnectionValidationSuccess());
-		//this.validationRules.push(new ConnectionGameWideValidationRule());
-		//this.validationRules.push(new ConnectionDroppedOnHigherScope());
-		//this.validationRules.push(new ConnectionScopeCountValidationRule());
+		this.validationRules.push(new ConnectionValidationDisconnect());
 	}
 
 	detach() {

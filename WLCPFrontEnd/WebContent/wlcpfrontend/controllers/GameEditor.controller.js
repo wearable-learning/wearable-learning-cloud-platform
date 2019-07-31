@@ -173,7 +173,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		//Else we need to create a new one
 		var connection = new Connection( this.createConnectionId(), oEvent.sourceId, oEvent.targetId);
 		this.connectionList.push(connection);
-		connection.validate();
+		connection.validateConnectionAttached();
 		return false;
 	},
 	
@@ -188,13 +188,17 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 							if(oEvent2 == sap.m.MessageBox.Action.OK) {
 								var connectionFrom = that.connectionList[i].connectionFrom.htmlId;
 								var connectionTo = that.connectionList[i].connectionTo.htmlId;
+								var connectionToDetatch = that.connectionList[i];
 								that.connectionList[i].detach();
 								GameEditor.getJsPlumbInstance().deleteConnection(GameEditor.getJsPlumbInstance().getConnections({source : connectionFrom, target : connectionTo})[0], {fireEvent : false, force : true});
+								connectionToDetatch.validateConnectionDetached();
 								DataLogger.logGameEditor();
 						}}});
 						return false;
 					} else {
+						var connectionToDetatch = this.connectionList[i];
 						this.connectionList[i].detach();
+						connectionToDetatch.validateConnectionDetached();
 						DataLogger.logGameEditor();
 						return true;
 					}

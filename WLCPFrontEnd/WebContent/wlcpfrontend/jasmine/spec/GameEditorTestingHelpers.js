@@ -91,7 +91,9 @@ var GameEditorTestingHelpers = {
 		GameEditor.getJsPlumbInstance().deleteConnection(connections[0], {fireEvent : false, force : true});
 		for(var i = 0; i < GameEditor.getEditorController().connectionList.length; i++) {
 			if(GameEditor.getEditorController().connectionList[i].connectionId == connection.connectionId) {
+				var connectionToDetach = GameEditor.getEditorController().connectionList[i];
 				GameEditor.getEditorController().connectionList[i].detach();
+				connectionToDetach.validateConnectionDetached();
 				break;
 			}
 		}

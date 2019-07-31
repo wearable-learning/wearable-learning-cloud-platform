@@ -275,9 +275,30 @@ describe("A suite to test the Validation Engine Loop Back Mechanisms for both st
 		var connection3 = GameEditorTestingHelpers.addConnection(startState.htmlId, outputState2.htmlId);
 		
 		expect(outputState.scopeMask == 1 && outputState2.scopeMask == 1).toBeTruthy();
+		expect(connection2.isNeighborLoopBack == true).toBeTruthy();
 	});
-	it("Neighbor Loopback Connection Loses Neighbor Loopback", function() {
+	it("Neighbor Loopback Connection No Longer Neighbor Loopback", function() {
+		GameEditorTestingHelpers.resetGameEditor();
 		
+		var startState = GameEditorTestingHelpers.createNewGame(3, 3);
+		var outputState = GameEditorTestingHelpers.addState(550, 350);
+		var outputState2 = GameEditorTestingHelpers.addState(950, 350);
+		
+		var connection = GameEditorTestingHelpers.addConnection(startState.htmlId, outputState.htmlId);
+		var connection2 = GameEditorTestingHelpers.addConnection(outputState.htmlId, outputState2.htmlId);
+		
+		outputState.modelJSON.iconTabs[0].navigationContainerPages[0].displayText = "Hello World!";
+		outputState.onChange();
+		
+		expect(outputState.scopeMask == 1 && outputState2.scopeMask == 8191).toBeTruthy();
+		
+		var connection3 = GameEditorTestingHelpers.addConnection(startState.htmlId, outputState2.htmlId);
+		
+		expect(outputState.scopeMask == 1 && outputState2.scopeMask == 1).toBeTruthy();
+		expect(connection2.isNeighborLoopBack == true).toBeTruthy();
+		
+		GameEditorTestingHelpers.removeConnection(connection3);
+		expect(connection2.isNeighborLoopBack == false).toBeTruthy();
 	})
 	
 	it("Neighbor Loopback No Transition Start State Game Wide (3x3)", function() {
