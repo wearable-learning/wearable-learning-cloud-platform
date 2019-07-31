@@ -240,7 +240,7 @@ var InputTransition = class InputTransition extends Transition {
 	
 	doubleClick() {
 		if(this.scopeMask == 0){
-			sap.m.MessageBox.error("Fill in the state above to edit this transition.");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.emptyState"));
 			return;
 		}
 		
@@ -374,7 +374,7 @@ var InputTransition = class InputTransition extends Transition {
 	
     acceptDialog() {
     	if(JSON.stringify(this.oldActiveScopes) != JSON.stringify(this.getActiveScopes())) {
-    		sap.m.MessageBox.confirm("By clicking OK, the validation engine will revalidate causing possible data loss in states and transitions below!", {title:"Confirm Revalidation?", onClose : $.proxy(this.acceptRevalidation, this)});
+    		sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.validationEngine"), {title:sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.validation.title"), onClose : $.proxy(this.acceptRevalidation, this)});
     		return;
     	}
 		this.validationRules[0].validate(this, true, true);
@@ -403,7 +403,7 @@ var InputTransition = class InputTransition extends Transition {
 	remove() {
 		
 		//Open a dialog so the user can confirm the delete
-		sap.m.MessageBox.confirm("Are you sure you want to delete this transition?", {onClose : $.proxy(this.removeTransition, this)});
+		sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.remove"), {onClose : $.proxy(this.removeTransition, this)});
 	}
 	
 	removeTransition(oAction) {

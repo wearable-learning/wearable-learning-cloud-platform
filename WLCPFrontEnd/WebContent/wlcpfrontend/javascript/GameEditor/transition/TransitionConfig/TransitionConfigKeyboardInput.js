@@ -108,10 +108,10 @@ var TransitionConfigKeyboardInput = class TransitionConfigKeyboardInput extends 
 		var keyboardInputValue = sap.ui.getCore().byId("keyboardInput").getValue().toLowerCase();
 		var keyboardValidation = new TransitionKeyboardInputValidationRule();
 		if(!keyboardValidation.validate(this.transition, keyboardInputValue, this.transition.model.getProperty(this.path23).scope)) {
-			sap.m.MessageBox.error("That keyboard input already exists in this scope (possibly in another neighbor transition)!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.keyboardInput.alreadyExists"));
 		} else {
 			if(keyboardInputValue == "") {
-				sap.m.MessageBox.information("Adding an empty keyboard input means the transition will occur if none of the defined strings are input (i.e. wrong sequence).");
+				sap.m.MessageBox.information(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.keyboardInput.emptyInput"));
 			}
 			var data = this.transition.model.getProperty(this.path23 + "/keyboardField");
 			data.push({value : keyboardInputValue});
@@ -124,7 +124,7 @@ var TransitionConfigKeyboardInput = class TransitionConfigKeyboardInput extends 
 	deleteKeyboardField(oEvent) {
 		this.deletePath = oEvent.getSource().getBindingContext().getPath();
 		this.deleteKeyboardPath = oEvent.getSource().getParent().getParent().getParent().getBindingContext().getPath() + "/keyboardField";
-		sap.m.MessageBox.confirm("Are you sure you want to delete this keyboard input?", {onClose : $.proxy(this.keyboardDeleteOnClose, this)});
+		sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.keyboardInput.remove"), {onClose : $.proxy(this.keyboardDeleteOnClose, this)});
 	}
 	
 	keyboardDeleteOnClose(oEvent) {

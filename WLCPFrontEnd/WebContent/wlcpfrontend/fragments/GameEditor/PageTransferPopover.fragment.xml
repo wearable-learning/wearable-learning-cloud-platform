@@ -8,12 +8,12 @@
 	xmlns:l="sap.ui.layout">
 	<Popover showHeader = "true" title="{i18n>gameEditor.switchScreen.title}" class="sapMOTAPopover sapTntToolHeaderPopover" placement="Bottom">
 		<l:HorizontalLayout class="sapUiSmallMargin">
-			<Button class="switchButton" type="Accept" text="{i18n>gameEditor.switchScreen.gameManager}" press="switchToManager">
+			<Button class="switchButton" type="Accept" text="{i18n>mode.gameManager}" press="switchToManager">
 					
 			</Button>
 		</l:HorizontalLayout>
 		<l:HorizontalLayout class="sapUiSmallMargin">
-			<Button class="switchButton" type="Accept" text="{i18n>gameEditor.switchScreen.gamePlayer}" press="switchToPlayer">
+			<Button class="switchButton" type="Accept" text="{i18n>mode.gamePlayer}" press="switchToPlayer">
 					
 			</Button>
 		</l:HorizontalLayout>

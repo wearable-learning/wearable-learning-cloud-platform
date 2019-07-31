@@ -148,14 +148,14 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 			}
 			DataLogger.logGameEditor();
 		} else {
-			sap.m.MessageBox.error("A transition could not be placed there!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.cannotPlaceTransition"));
 		}
 	},
 	
 	connectionDropped : function(oEvent) {
 		//Check to see if the state has an input transition
 		if(GameEditor.getJsPlumbInstance().getConnections({target : oEvent.sourceId}).length == 0 && !oEvent.sourceId.includes("start")) {
-			sap.m.MessageBox.error("You cannot have any output connections without input connections.");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.outputWithoutInput"));
 			return false;
 		}
 		//Check to see if the connection already exists
@@ -165,7 +165,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 			if(oEvent.connection.id == this.connectionList[i].connectionId) {
 				return false;
 			} else if(oEvent.sourceId == this.connectionList[i].connectionFrom.htmlId && oEvent.targetId == this.connectionList[i].connectionTo.htmlId) {
-				sap.m.MessageBox.error("You cannot have mutliple connections with same source and target state!");
+				sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.duplicateConnection"));
 				return false;
 			}
 		}
@@ -184,7 +184,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 			for(var i = 0; i < this.connectionList.length; i++) {
 				if(this.connectionList[i].connectionId == oEvent.id) {
 					if(this.connectionList[i].connectionFrom.getActiveScopes().length > 0) {
-						sap.m.MessageBox.confirm("By clicking OK, the validation engine will revalidate causing possible data loss in states and transitions below!", {title:"Confirm Connection Removal?", onClose : function (oEvent2) {
+						sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.validationEngine"), {title:sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.validation.title"), onClose : function (oEvent2) {
 							if(oEvent2 == sap.m.MessageBox.Action.OK) {
 								var connectionFrom = that.connectionList[i].connectionFrom.htmlId;
 								var connectionTo = that.connectionList[i].connectionTo.htmlId;
@@ -371,7 +371,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	},
 	
 	loadError : function() {
-		sap.m.MessageBox.error("There was an error loading the game!");
+		sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.loadingError"));
 		this.busy.close();
 	},
 	
@@ -393,7 +393,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 			if(this.saveRun) {
 				return;
 			} else {
-				sap.m.MessageBox.error("You cannot edit someone elses game. Please make a copy!");
+				sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.editCopy"));
 				return;
 			}
 		}
@@ -464,21 +464,21 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	
 	saveError : function() {
 		this.busy.close();
-		sap.m.MessageBox.error("There was an error saving the game!");
+		sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.saveError"));
 	},
 	
 	transpileSuccess : function() {
 		if(!this.saveRun) {
-			sap.m.MessageToast.show("Save & Transpile Complete!");
+			sap.m.MessageToast.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.transpile"));
 			this.busy.close();
 		} else {
-			sap.m.MessageToast.show("Saved and Transpiled Successfully! Opening Debugger!");
+			sap.m.MessageToast.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.transpileDebug"));
 			$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/checkDebugInstanceRunning?usernameId=" + sap.ui.getCore().getModel("user").oData.username, type: 'GET', success : $.proxy(this.checkForRunningDebugInstanceSuccess, this), error : $.proxy(this.checkForRunningDebugInstanceError, this)});
 		}
 	},
 	
 	transpileError : function() {
-		sap.m.MessageBox.error("The game was saved, but there was an error transpiling!");
+		sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.transpileError"));
 		this.busy.close();
 	},
 	
@@ -495,14 +495,14 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	
 	checkForRunningDebugInstanceSuccess : function(data) {
 		if(data == true) {
-			sap.m.MessageBox.confirm("You are already debugging a game instance. Do you want to restart the instance (OK) or open another debugger (CANCEL) (to continue debugging the current game with another user)?", {onClose : $.proxy(this.handleDebugInstanceMessageBox, this)});
+			sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.alreadyDebugging"), {onClose : $.proxy(this.handleDebugInstanceMessageBox, this)});
 		} else {
 			$.ajax({url : "http://" + ServerConfig.getServerAddress() + "/controllers/startDebugGameInstance/" + this.gameModel.GameId + "/" + sap.ui.getCore().getModel("user").oData.username + "/false", success : $.proxy(this.openDebuggerWindow, this), error : $.proxy(this.checkForRunningDebugInstanceError, this)});
 		}
 	},
 	
 	checkForRunningDebugInstanceError : function() {
-		sap.m.MessageBox.error("There was an error starting the debug game instance!");
+		sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.debugError"));
 	},
 	
 	handleDebugInstanceMessageBox : function(oAction) {
@@ -533,31 +533,31 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	
 	copyGame : function(oEvent) {
 		var dialog = new sap.m.Dialog({
-			title : "Copy Game",
+			title : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.copy.title"),
 			content : new sap.m.Input({
-				placeholder : "New Game Name"
+				placeholder : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.copy.placeholder")
 			}),
 			beginButton : new sap.m.Button({
-				text : "Copy Game",
+				text : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.copy.title"),
 				type : sap.m.ButtonType.Accept,
 				press : $.proxy(function(oAction) {
 					var newGameId = oAction.oSource.getParent().mAggregations.content[0].getValue();
 					if(!newGameId.match(/^[a-zA-Z]+$/)) {
-						sap.m.MessageBox.error("a-z upper case and lower case only game name");
+						sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.copy.gameNameError"));
 						return;
 					}
 					$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/copyGame?gameId=" + this.gameModel.GameId + "&newGameId=" + newGameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function(data) {
-						sap.m.MessageToast.show("Game Copied!");
+						sap.m.MessageToast.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.copied"));
 						dialog.close();
 						this.reloadGame(newGameId);
 					}, this), error : $.proxy(function(data) {
 						dialog.close();
-						sap.m.MessageToast.show(data.responseText);
+						sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.copy.error"))
 					}, this)});
 				}, this)
 			}),
 			endButton : new sap.m.Button({
-				text : "Cancel",
+				text : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("button.cancel"),
 				type : sap.m.ButtonType.Reject,
 				press : function() {
 					dialog.close();
@@ -572,31 +572,31 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	
 	renameGame : function(oEvent) {
 		var dialog = new sap.m.Dialog({
-			title : "Rename Game",
+			title : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.rename.title"),
 			content : new sap.m.Input({
-				placeholder : "New Game Name"
+				placeholder : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.rename.placeholder")
 			}),
 			beginButton : new sap.m.Button({
-				text : "Rename Game",
+				text : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.rename.title"),
 				type : sap.m.ButtonType.Accept,
 				press : $.proxy(function(oAction) {
 					var newGameId = oAction.oSource.getParent().mAggregations.content[0].getValue();
 					if(!newGameId.match(/^[a-zA-Z]+$/)) {
-						sap.m.MessageBox.error("a-z upper case and lower case only game name");
+						sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.copy.gameNameError"));
 						return;
 					}
 					$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/renameGame?gameId=" + this.gameModel.GameId + "&newGameId=" + newGameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function(data) {
-						sap.m.MessageToast.show("Game Renamed!");
+						sap.m.MessageToast.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.renamed"));
 						dialog.close();
 						this.reloadGame(newGameId);
 					}, this), error : $.proxy(function(data) {
 						dialog.close();
-						sap.m.MessageToast.show(data.responseText);
+						sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.rename.error"))
 					}, this)});
 				}, this)
 			}),
 			endButton : new sap.m.Button({
-				text : "Cancel",
+				text : sap.ui.getCore().getModel("i18n").getResourceBundle().getText("button.cancel"),
 				type : sap.m.ButtonType.Reject,
 				press : function() {
 					dialog.close();
@@ -610,14 +610,14 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	},
 	
 	deleteGame : function(oEvent) {
-		sap.m.MessageBox.confirm("Are you sure you want to delete the game?", { icon : sap.m.MessageBox.Icon.WARNING, onClose : $.proxy(function(oAction) {
+		sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.delete.confirm"), { icon : sap.m.MessageBox.Icon.WARNING, onClose : $.proxy(function(oAction) {
 			if(oAction == sap.m.MessageBox.Action.OK) {
 				$.ajax({url: ODataModel.getWebAppURL() + "/Rest/Controllers/deleteGame?gameId=" + this.gameModel.GameId + "&usernameId=" + sap.ui.getCore().getModel("user").oData.username , type: 'GET', success : $.proxy(function() {
 					this.resetEditor();
 					sap.ui.getCore().byId("gameEditor--saveButton").setEnabled(false);
 					sap.ui.getCore().byId("gameEditor--runButton").setEnabled(false);
 					sap.ui.getCore().byId("gameEditor--optionsButton").setEnabled(false);
-					sap.m.MessageToast.show("The game has been deleted!")
+					sap.m.MessageToast.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.deleted"))
 				}, this), error : $.proxy(function(data) {
 					sap.m.MessageToast.show(data.responseText);
 				}, this)});
@@ -689,6 +689,19 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 		this.quickStartHelpDialog.destroy();
 	},
 	
+	quickStartCookie : function() {
+		if (document.cookie.split(';').filter((item) => item.trim().startsWith('lastAccess=')).length) {
+			let cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)lastAccess\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+			if(Date.now() - Date.parse(cookieValue) > 7 * 24 * 60 * 60 * 1000) { //if last access more than 7 days ago
+				this.quickStartHelp();
+			}
+		} else {
+			console.log(document.cookie)
+			this.quickStartHelp();
+		}
+		document.cookie = "lastAccess=" + new Date().toString();
+	},
+	
 /**
 * Called when a controller is instantiated and its View controls (if available) are already created.
 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
@@ -697,7 +710,7 @@ sap.ui.controller("wlcpfrontend.controllers.GameEditor", {
 	onInit: function() {
 		
 		window.onbeforeunload = function() {
-			return "Are you sure you want to leave this page? You will lose all unsaved data!";
+			return sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.confirmExit");
 		};
 		
 		GameEditor.getEditor().addEventDelegate({

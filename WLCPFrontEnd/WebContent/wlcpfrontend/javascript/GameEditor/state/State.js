@@ -91,7 +91,7 @@ var State = class State {
 	remove() {
 		
 		//Open a dialog so the user can confirm the delete
-		sap.m.MessageBox.confirm("Are you sure you want to delete this state?", {onClose : $.proxy(this.removeState, this)});
+		sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.state.remove"), {onClose : $.proxy(this.removeState, this)});
 	}
 	
 	removeState(oAction) {
