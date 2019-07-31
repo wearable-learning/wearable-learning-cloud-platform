@@ -12,7 +12,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		var maxPlayerValue = this.getMaxPlayer(9, teamCount)
 		if(playerCount > maxPlayerValue){
 			GameEditor.getEditorController().newGameModel.PlayersPerTeam = playerCount - 1;
-			sap.m.MessageBox.error("For " + teamCount +" Team, Player count cannot be greater than "+ maxPlayerValue + " each");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team1") + teamCount +sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team2")+ maxPlayerValue + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team3"));
 		}
 			
 	},
@@ -26,7 +26,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		var maxPlayerValue = this.getMaxPlayer(9, teamCount)
 		if(playerCount > maxPlayerValue){
 			GameEditor.getEditorController().newGameModel.TeamCount = teamCount - 1;
-			sap.m.MessageBox.error("For " + teamCount +" Team, Player count cannot be greater than "+ maxPlayerValue + " each");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team1") + teamCount +sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team2")+ maxPlayerValue + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team3"));
 		}
 			
 	},
@@ -43,7 +43,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	 */
 	createGame : function() {
 		if(!GameEditor.getEditorController().newGameModel.GameId.match(/^[a-zA-Z]+$/)) {
-			sap.m.MessageBox.error("a-z upper case and lower case only game name");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.copy.gameNameError"));
 			return;
 		}
 		ODataModel.getODataModel().create("/Games", GameEditor.getEditorController().newGameModel, {success : this.createGameSuccess, error: this.createGameError});
@@ -52,14 +52,14 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	loadGame : function() {
 		var gameToLoad = "";
 		if(sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey() != "" && sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey() != "") {
-			sap.m.MessageBox.error("You cannot load both a personal and public game at the same time! Please select one!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.load.selectError"));
 			return;
 		} else if(sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey() != "") {
 			gameToLoad = sap.ui.getCore().byId("userLoadGameComboBox").getSelectedKey();
 		} else if(sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey() != "") {
 			gameToLoad = sap.ui.getCore().byId("publicLoadGameComboBox").getSelectedKey();
 		} else {
-			sap.m.MessageBox.error("Please select a game to load!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.load.selectNoneError"));
 			return;
 		}
 		var filters = [];
@@ -110,7 +110,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		}
 		sap.ui.getCore().byId("createGame").close();
 		sap.ui.getCore().byId("createGame").destroy();
-		sap.m.MessageToast.show("Game Created Successfully!");
+		sap.m.MessageToast.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.messages.createSuccess"));
 	},
 	
 	loadGameSuccess : function(oData) {
@@ -127,7 +127,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	},
 	
 	loadGameError : function() {
-		sap.m.MessageBox.error("There was an error loading the game.");
+		sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.load.error"));
 	},
 	
 	/**
@@ -135,6 +135,6 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 	 * and error message will be shown.
 	 */
 	createGameError : function(oError) {
-		sap.m.MessageBox.error("There was an error creating the game. Make sure the name does not already exist!");
+		sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.create.error"));
 	}
 });

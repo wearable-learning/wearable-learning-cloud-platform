@@ -137,11 +137,11 @@ var TransitionConfigSequenceButtonPress = class TransitionConfigSequenceButtonPr
 			}
 		}
 		if(buttonsArray.length == 0) {
-			sap.m.MessageBox.information("Adding an empty sequence means the transition will occur if none of the defined sequences are input (i.e. wrong sequence).");
+			sap.m.MessageBox.information(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress.emptyInput"));
 		}
 		var sequenceValidation = new TransitionSequenceButtonPressValidationRule();
 		if(!sequenceValidation.validate(this.transition, {buttons : buttonsArray}, this.transition.model.getProperty(this.path23).scope)) {
-			sap.m.MessageBox.error("That sequence already exists in this scope (possibly in another neighbor transition)!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress.alreadyExists"));
 		} else {
 			data.push({buttons : buttonsArray});
 			this.transition.model.setProperty(this.path23 + "/sequencePress", data);
@@ -154,7 +154,7 @@ var TransitionConfigSequenceButtonPress = class TransitionConfigSequenceButtonPr
 	deleteSequence(oEvent) {
 		this.deletePath = oEvent.getSource().getBindingContext().getPath();
 		this.deleteSequencePath = oEvent.getSource().getParent().getParent().getBindingContext().getPath() + "/sequencePress";
-		sap.m.MessageBox.confirm("Are you sure you want to delete this sequence?", {onClose : $.proxy(this.deleteOnClose, this)});
+		sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.inputTransition.sequenceButtonPress.remove"), {onClose : $.proxy(this.deleteOnClose, this)});
 	}
 	
 	deleteOnClose(oEvent) {
