@@ -6,16 +6,13 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		mode : "",
 		items : [
 			{
-				key : "A",
-				text : "Game Manager"//sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameManager")
+				text : ""
 			},
 			{
-				key : "A",
-				text : "Game Editor"//sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameEditor")
+				text : ""
 			}, 
 			{
-				key : "A",
-				text : "Game Player"//sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gamePlayer")
+				text : ""
 			}
 		],
 		newUser : {
@@ -43,15 +40,15 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		this.userModelData.username = this.modelData.username.toLowerCase();
 		this.userModel.setData(this.userModelData);
 		switch(this.modelData.mode) {
-		case "Game Manager"://sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameManager"): 
+		case sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameManager"): 
 			Index.switchToGameManager();
 			break;
-		case "Game Editor"://sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameEditor"):
+		case sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameEditor"):
 			Index.switchToGameEditor();
 			Index.gameEditorPage.getController().quickStartHelp();
 			//Index.gameEditorPage.getController().quickStartCookie();
 			break;
-		case "Game Player"://sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gamePlayer"):
+		case sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gamePlayer"):
 			Index.switchToGamePlayer();
 			Index.gamePlayerPage.getController().debugMode = false;
 			Index.gamePlayerPage.getController().initVirtualDevice();
@@ -170,11 +167,16 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		//Setup the ODATA
 		ODataModel.setupODataModel();
 		
-//		this.getView().addEventDelegate({
-//			  onAfterRendering: function(){
-//				  this.onLoginPress();
-//			  }
-//			}, this);
+		this.getView().addEventDelegate({
+			  onAfterRendering: function(){
+				    //this.onLoginPress();
+					this.modelData.items[0].text = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameManager");
+					this.modelData.items[1].text = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameEditor");
+					this.modelData.items[2].text =sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gamePlayer");
+					this.model.setData(this.modelData);
+					this.getView().setModel(this.model);
+			  }
+			}, this);
 	},
 
 /**
