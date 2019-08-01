@@ -68,7 +68,7 @@ var StartState = class StartState extends State {
 	}
 	
 	explainWindow(){
-		sap.m.MessageBox.information("This is where your players will enter the game. Draw an arrow to the first state you want them to see!");
+		sap.m.MessageBox.information(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.state.startExplain"));
 		return;
 	}
 }

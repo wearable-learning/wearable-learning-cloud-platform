@@ -6,16 +6,13 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		mode : "",
 		items : [
 			{
-				key : "A",
-				text : "Game Manager"
+				text : ""
 			},
 			{
-				key : "A",
-				text : "Game Editor"
+				text : ""
 			}, 
 			{
-				key : "A",
-				text : "Player"
+				text : ""
 			}
 		],
 		newUser : {
@@ -43,13 +40,15 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		this.userModelData.username = this.modelData.username.toLowerCase();
 		this.userModel.setData(this.userModelData);
 		switch(this.modelData.mode) {
-		case "Game Manager": 
+		case sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameManager"): 
 			Index.switchToGameManager();
 			break;
-		case "Game Editor":
+		case sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameEditor"):
 			Index.switchToGameEditor();
+			Index.gameEditorPage.getController().quickStartHelp();
+			//Index.gameEditorPage.getController().quickStartCookie();
 			break;
-		case "Player":
+		case sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gamePlayer"):
 			Index.switchToGamePlayer();
 			Index.gamePlayerPage.getController().debugMode = false;
 			Index.gamePlayerPage.getController().initVirtualDevice();
@@ -86,12 +85,12 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		}
 		
 		if(!usernameFound) {
-			sap.m.MessageBox.error("Login Credentials Incorrect!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("login.message.incorrectLogin"));
 		}
 	},
 	
 	oDataError : function(oData) {
-		sap.m.MessageBox.error("There was an error validating the login credentials!");
+		sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("login.message.validationError"));
 	},
 	
 	registerNewUser : function() {
@@ -114,19 +113,19 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		
 		//Make sure username and password are filled out
 		if(registerData.UsernameId == "" || registerData.Password == "") {
-			sap.m.MessageBox.error("Please make sure username and password is filled out!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("register.message.fill"));
 			return;
 		}
 		
 		//Make sure a-z A-Z only
 		if(!registerData.UsernameId.match(/^[a-zA-Z]+$/)) {
-			sap.m.MessageBox.error("a-z upper case and lower case only username");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("register.message.usernameRequirements"));
 			return;
 		}
 		
 		//Check to make sure that username doesnt already exist
 		if(typeof ODataModel.getODataModel().getProperty("/Usernames('" + registerData.UsernameId + "')") !== "undefined") {
-			sap.m.MessageBox.error("That username already exists!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("register.message.duplicateUsername"));
 			return;
 		}
 		
@@ -138,7 +137,7 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 	},
 	
 	registerSuccess : function() {
-		sap.m.MessageBox.success("You have been registered!");
+		sap.m.MessageBox.success(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("register.message.success"));
 		this.cancelRegisterNewUser();
 	},
 	
@@ -168,11 +167,16 @@ sap.ui.controller("wlcpfrontend.controllers.Login", {
 		//Setup the ODATA
 		ODataModel.setupODataModel();
 		
-//		this.getView().addEventDelegate({
-//			  onAfterRendering: function(){
-//				  this.onLoginPress();
-//			  }
-//			}, this);
+		this.getView().addEventDelegate({
+			  onAfterRendering: function(){
+				    //this.onLoginPress();
+					this.modelData.items[0].text = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameManager");
+					this.modelData.items[1].text = sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gameEditor");
+					this.modelData.items[2].text =sap.ui.getCore().getModel("i18n").getResourceBundle().getText("mode.gamePlayer");
+					this.model.setData(this.modelData);
+					this.getView().setModel(this.model);
+			  }
+			}, this);
 	},
 
 /**

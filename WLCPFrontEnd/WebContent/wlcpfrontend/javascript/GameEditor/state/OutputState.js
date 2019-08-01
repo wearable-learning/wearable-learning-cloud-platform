@@ -65,7 +65,7 @@ var OutputState = class OutputState extends State {
 		//Check to see if we have a connection to us
 		var hasConnection = this.inputConnections.length > 0;
 		if(!hasConnection) {
-			sap.m.MessageBox.error("Drop a connection of the state before using it!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.state.noConnections"));
 			return;
 		}
 		
@@ -79,13 +79,13 @@ var OutputState = class OutputState extends State {
 		}
 		
 		if(!oneFilled) {
-			sap.m.MessageBox.error("All of the input states are empty. Fill in at least one the input state to edit this one!");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.state.emptyInputs"));
 			return;
 		}
 		
 		//check if neighbor states have filled all scopes
 		if(this.scopeMask == 0){
-			sap.m.MessageBox.error("All players and teams have been assigned in neighbor states. Do you really need this state? Who do you want to see this state? Check the neighbor states to see what those players are seeing.");
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.state.filledScope"));
 			return;
 		}
 		
@@ -300,7 +300,7 @@ var OutputState = class OutputState extends State {
     
     acceptDialog() {
     	if(JSON.stringify(this.oldActiveScopes) != JSON.stringify(this.getActiveScopes())) {
-    		sap.m.MessageBox.confirm("By clicking OK, the validation engine will revalidate causing possible data loss in states and transitions below!", {title:"Confirm Revalidation?", onClose : $.proxy(this.acceptRevalidation, this)});
+    		sap.m.MessageBox.confirm(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.validationEngine"), {title:sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.validation.title"), onClose : $.proxy(this.acceptRevalidation, this)});
     		return;
     	}
 		this.validationRules[0].validate(this, true, true);
