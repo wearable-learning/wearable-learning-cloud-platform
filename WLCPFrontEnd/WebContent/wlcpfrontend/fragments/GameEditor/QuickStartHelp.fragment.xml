@@ -12,7 +12,7 @@
 			<pages>	
 				<l:VerticalLayout class="sapUiContentPadding" width="100%">
 					<Text text="{i18n>gameEditor.quickstart.step1}" textAlign="Center" width="100%"/>
-					<core:HTML content="&lt;video autoplay loop muted width=100%&gt;&lt;source src=&quot;wlcpfrontend/videos/{i18n>gameEditor.quickstart.video}1.mp4&quot; type=&quot;video/mp4&quot;&gt;&lt;/video&gt;" width="100%" height="auto"/>
+					<core:HTML content="&lt;video autoplay loop muted width=100%&gt;&lt;source src=&quot;wlcpfrontend/videos/{i18n>gameEditor.quickstart.video}1.mp4&quot; type=&quot;video/mp4&quot;&gt;&lt;/video&gt;"/>
 				</l:VerticalLayout>	
 				<l:VerticalLayout class="sapUiContentPadding" width="100%">
 					<Text text="{i18n>gameEditor.quickstart.step2}" textAlign="Center" width="100%"/>
