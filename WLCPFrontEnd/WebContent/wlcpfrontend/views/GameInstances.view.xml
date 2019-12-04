@@ -11,7 +11,7 @@
 		</subHeader>
 		<content>
 			<TileContainer id="gameInstanceTileContainer" tileDelete="onStopGameInstance" tiles="{path : 'odata>/GameInstances', parameters : {expand : 'GameDetails'}}" >
-				<StandardTile press="onTilePress" number="{odata>GameInstanceId}" numberUnit="Instance Id" title="{odata>Game}" icon="sap-icon://instance" />
+				<StandardTile press="onTilePress" number="{odata>GameInstanceId}" numberUnit="Game Pin" title="{odata>Game}" icon="sap-icon://instance" />
 			</TileContainer>
 		</content>
 		<footer>
