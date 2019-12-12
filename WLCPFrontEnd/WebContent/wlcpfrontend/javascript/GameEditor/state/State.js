@@ -144,20 +144,24 @@ var State = class State {
 		this.jsPlumbInstance.revalidate(this.stateDiv.id);
 	}
 	
+	addPadSpace() {
+		if((this.positionX + this.width + 50) >= document.getElementById("gameEditor--pad").getBoundingClientRect().width - 75) {
+			document.getElementById("gameEditor--pad").style.width = (document.getElementById("gameEditor--pad").getBoundingClientRect().width + 500) + "px";
+			//document.getElementById("gameEditor--mainSplitter-content-1").scrollBy({ top: 0, left: document.getElementById("gameEditor--pad").clientWidth, behavior: 'smooth' });
+		}
+		if((this.positionY + this.height + 50) >= document.getElementById("gameEditor--pad").getBoundingClientRect().height - 75) {
+			document.getElementById("gameEditor--pad").style.height = (document.getElementById("gameEditor--pad").getBoundingClientRect().height + 500) + "px";
+			//document.getElementById("gameEditor--mainSplitter-content-1").scrollBy({ top: document.getElementById("gameEditor--pad").clientHeight, left: 0, behavior: 'smooth' });
+		}
+	}
+	
 	moved() {
 		
 		//Update the position
 		this.positionX = parseFloat(document.getElementById(this.htmlId).style.left.replace("px", ""));
 		this.positionY = parseFloat(document.getElementById(this.htmlId).style.top.replace("px", ""));
 		
-		if((this.positionX + this.width + 50) >= document.getElementById("gameEditor--pad").getBoundingClientRect().width) {
-			document.getElementById("gameEditor--pad").style.width = (document.getElementById("gameEditor--pad").getBoundingClientRect().width + 500) + "px";
-			document.getElementById("gameEditor--mainSplitter-content-1").scrollBy({ top: 0, left: document.getElementById("gameEditor--pad").clientWidth, behavior: 'smooth' });
-		}
-		if((this.positionY + this.height + 50) >= document.getElementById("gameEditor--pad").getBoundingClientRect().height) {
-			document.getElementById("gameEditor--pad").style.height = (document.getElementById("gameEditor--pad").getBoundingClientRect().height + 500) + "px";
-			document.getElementById("gameEditor--mainSplitter-content-1").scrollBy({ top: document.getElementById("gameEditor--pad").clientHeight, left: 0, behavior: 'smooth' });
-		}
+		this.addPadSpace();
 	}
 	
 	stopped() {

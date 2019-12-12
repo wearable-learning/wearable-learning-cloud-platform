@@ -12,7 +12,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		var maxPlayerValue = this.getMaxPlayer(9, teamCount)
 		if(playerCount > maxPlayerValue){
 			GameEditor.getEditorController().newGameModel.PlayersPerTeam = playerCount - 1;
-			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team1") + teamCount +sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team2")+ maxPlayerValue + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team3"));
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team1") + teamCount + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team2")+ maxPlayerValue + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team3"));
 		}
 			
 	},
@@ -26,7 +26,7 @@ sap.ui.controller("wlcpfrontend.controllers.CreateLoadGame", {
 		var maxPlayerValue = this.getMaxPlayer(9, teamCount)
 		if(playerCount > maxPlayerValue){
 			GameEditor.getEditorController().newGameModel.TeamCount = teamCount - 1;
-			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team1") + teamCount +sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team2")+ maxPlayerValue + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team3"));
+			sap.m.MessageBox.error(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team1") + teamCount + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team2")+ maxPlayerValue + " " + sap.ui.getCore().getModel("i18n").getResourceBundle().getText("gameEditor.team3"));
 		}
 			
 	},
