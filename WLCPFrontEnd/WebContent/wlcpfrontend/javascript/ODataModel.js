@@ -4,6 +4,7 @@ var ODataModel = {
 	
 	setupODataModel : function() {
 		this.oDataModel = new sap.ui.model.odata.v2.ODataModel(this.getODataModelURL(), {success: this.success, error: this.error});
+		this.oDataModel.setSizeLimit(1000);
 		sap.ui.getCore().setModel(this.oDataModel, "odata");
 	},
 	
