@@ -25,6 +25,10 @@ var StateConfigDisplayPhoto = class StateConfigDisplayPhoto extends StateConfig 
 		}
 	}
 	
+	openImageUpload() {
+		window.open("https://imgur.com/upload");
+	}
+	
 	updateScalingString(oEvent) {
 		var iconTabs = this.state.modelJSON.iconTabs;
 		for(var i = 0; i < iconTabs.length; i++) {

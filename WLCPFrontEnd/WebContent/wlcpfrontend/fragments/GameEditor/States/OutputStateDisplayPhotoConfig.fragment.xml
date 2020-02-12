@@ -12,7 +12,10 @@
 	</FlexBox>
 	<FlexBox alignItems="Start" justifyContent="Center">
 		<items>
-			<TextArea rows="1" value="{url}" liveChange="updateScalingString" valueLiveUpdate="true"/>
+			<VBox>
+				<TextArea rows="1" value="{url}" liveChange="updateScalingString" valueLiveUpdate="true"/>
+				<Button text="Upload Image" press="openImageUpload"/>
+			</VBox>
 		</items>
 	</FlexBox>
 	<FlexBox alignItems="Start" justifyContent="Center">
